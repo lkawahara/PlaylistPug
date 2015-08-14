@@ -1,5 +1,3 @@
 deploy:
   provider: heroku
-  api_key:AdqzMWy97wo4d1qMaWKpCj7huP8jcKk4sdj43kYnOmB2B9o28c4WLtD0NtvKavfctWmieTzZRGpPzGeeZ8K4Iq099gDoBOnSlziFOVUDxxdX30tgJkK8+cMVqddkO3eT2UHPFapHRLqiu5wg074hebqsdRSxYTpRBQa/J2Q/DmM=
-  run: 
-   - restart
+  api_key:a5ff1417-900e-4abe-a4f8-55055e6f9645
