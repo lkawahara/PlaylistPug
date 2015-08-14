@@ -17,4 +17,3 @@ env:
   - HATCHET_BUILDPACK_BASE="https://github.com/heroku/heroku-buildpack-java.git"
   - SHUNIT_HOME="/tmp/shunit2-2.1.6"
   - secure: AdqzMWy97wo4d1qMaWKpCj7huP8jcKk4sdj43kYnOmB2B9o28c4WLtD0NtvKavfctWmieTzZRGpPzGeeZ8K4Iq099gDoBOnSlziFOVUDxxdX30tgJkK8+cMVqddkO3eT2UHPFapHRLqiu5wg074hebqsdRSxYTpRBQa/J2Q/DmM=
-  matrix:
