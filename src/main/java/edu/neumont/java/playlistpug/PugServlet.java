@@ -28,13 +28,14 @@ public class PugServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String destination = "";
+		String destination = request.getPathInfo();
 		String[] path = null;
 		if(request.getPathInfo() == null || request.getPathInfo().equals("")){
 			destination = "/WEB-INF/index.jsp";
 		}else{
 			path = request.getPathInfo().substring(1).split("/");
-			if(path[0].equals("index") || path[0].equals("main") || path[0].equals("home")){
+			Boolean b = destination.equals("/");
+			if(destination.equals("/") || path[0].equals("index") || path[0].equals("main") || path[0].equals("home")){
 				destination = "/WEB-INF/index.jsp";
 			}else if(path[0].equals("upload")){
 				destination = "/WEB-INF/upload.jsp";
