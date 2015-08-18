@@ -4,18 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Home</title>
+<title>Search</title>
 </head>
 <body>
-<div id="header">
-<h1>Welcome to PugPlaylist!</h1>
-</div>
-<div id="navBar">
+<nav>
 <a href="/pugs/index">Home</a>
 <a href="/pugs/upload">Upload</a>
 <a href="/pugs/search">Search</a>
-</div>
-<img src="http://i.imgur.com/PugI0QN.jpg"/>
-<p>Index</p>
+</nav>
+<p>Search</p>
 </body>
 </html>
