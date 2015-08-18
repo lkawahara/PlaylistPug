@@ -1,5 +1,22 @@
 language: java
-deploy:
-  provider: heroku
-  api_key: a5ff1417-900e-4abe-a4f8-55055e6f9645
-  app: playlistpug
+branches:
+  only:
+  - master
+before_install:
+- curl --silent https://shunit2.googlecode.com/files/shunit2-2.1.6.tgz | tar xz -C
+  /tmp/
+- git clone https://github.com/ryanbrainard/heroku-buildpack-testrunner.git /tmp/testrunner
+- "./etc/hatchet_travis_setup.sh"
+install: true
+script: eval $TEST_CMD
+after_script: heroku keys:remove $USER@`hostname`
+env:
+  global:
+  - HATCHET_RETRIES=3
+  - HATCHET_DEPLOY_STRATEGY=git
+  - HATCHET_BUILDPACK_BASE="https://github.com/heroku/heroku-buildpack-java.git"
+  - SHUNIT_HOME="/tmp/shunit2-2.1.6"
+  - secure: AdqzMWy97wo4d1qMaWKpCj7huP8jcKk4sdj43kYnOmB2B9o28c4WLtD0NtvKavfctWmieTzZRGpPzGeeZ8K4Iq099gDoBOnSlziFOVUDxxdX30tgJkK8+cMVqddkO3eT2UHPFapHRLqiu5wg074hebqsdRSxYTpRBQa/J2Q/DmM=
+  matrix:
+  - TEST_CMD='[ "$TRAVIS_PULL_REQUEST" = "false" ] && mvn verify || true'
+  - TEST_CMD="/tmp/testrunner/bin/run -c ."
