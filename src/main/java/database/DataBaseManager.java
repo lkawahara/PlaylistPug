@@ -41,6 +41,6 @@ public class DataBaseManager
 		 //This is bad but you must replace it
 		 ApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 		 this.basicDataSource = (BasicDataSource) context.getBean("dataSource");
-		 String test = "This was a triumph";
+		 //String test = "This was a triumph";
 	}
 }
