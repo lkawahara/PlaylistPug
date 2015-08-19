@@ -1,0 +1,9 @@
+database\IDataBaseManager.class
+edu\neumont\spring\config\SecurityConfig.class
+edu\neumont\spring\config\WebConfiguration.class
+edu\neumont\spring\config\SecurityWebApplicationInitializer.class
+edu\neumont\spring\config\MainConfig.class
+edu\neumont\spring\config\MyWebApplicationInitializer.class
+database\DataBaseManager$ConnactionManagment.class
+edu\neumont\spring\config\PersistenceConfig.class
+database\DataBaseManager.class
