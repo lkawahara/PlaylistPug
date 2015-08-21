@@ -13,5 +13,9 @@
 <a href="/pugs/search">Search</a>
 </nav>
 <p>Upload</p>
+<form action="pug/song/upload" method="post">
+  <input type="file" name="pic" accept="image/*">
+  <input type="submit">
+</form>
 </body>
 </html>

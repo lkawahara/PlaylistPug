@@ -15,13 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/pugs/*")
 public class PugServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private String[] dummy = {"One","Two","Three","Four","Five"};
+    private String rowOne = "";
+    private String rowTwo = "";
+    private String rowThree = "";
     /**
      * @see HttpServlet#HttpServlet()
      */
     public PugServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -30,11 +32,13 @@ public class PugServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String destination = request.getPathInfo();
 		String[] path = null;
+		String error = "You done goofed.";
+		request.setAttribute("error", error);
 		if(request.getPathInfo() == null || request.getPathInfo().equals("")){
 			destination = "/WEB-INF/index.jsp";
 		}else{
 			path = request.getPathInfo().substring(1).split("/");
-			Boolean b = destination.equals("/");
+			
 			if(destination.equals("/") || path[0].equals("index") || path[0].equals("main") || path[0].equals("home")){
 				destination = "/WEB-INF/index.jsp";
 			}else if(path[0].equals("upload")){
@@ -44,12 +48,18 @@ public class PugServlet extends HttpServlet {
 				//song as whatever is needed to play the song
 				request.setAttribute("name", "song name");
 				request.setAttribute("song", "song data");
+				request.setAttribute("sid", 1);
 				destination = "/WEB-INF/song.jsp";
 			}else if(path[0].equals("search")){
 				//depends on how we decide to do the searching
 				//may set attribute to search terms or list of search results
-				request.setAttribute("search_terms_or_results", "");
+				getResults();
+				request.setAttribute("rowOne", rowOne);
+				request.setAttribute("rowTwo", rowTwo);
+				request.setAttribute("rowThree", rowThree);
 				destination = "/WEB-INF/search.jsp";
+			}else{
+				destination = "/WEB-INF/error.jsp";
 			}
 		}
 		RequestDispatcher rd = request.getRequestDispatcher(destination);
@@ -60,7 +70,47 @@ public class PugServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+		String redirect = "";
+		String p = request.getPathInfo().substring(1);
+		String[] path = p.split("/");	
 
+	}
+	private void getResults(){
+		int rounds = dummy.length / 3;
+		if(dummy.length % 3 == 0){
+			for(int i = 0; i < rounds; i++){
+				rowOne += "<a href='/pugs/home'>" + dummy[i] + "</a>";
+			}
+			for(int i = 0; i < rounds; i++){
+				rowTwo += "<a href='/pugs/home'>" + dummy[rounds + i] + "</a>";
+			}
+			for(int i = 0; i < rounds; i++){
+				rowThree += "<a href='/pugs/home'>" + dummy[(rounds * 2) + i] + "</a>";
+			}
+		}else if(dummy.length % 3 == 1){
+			for(int i = 0; i < rounds; i++){
+				rowOne += "<a href='/pugs/home'>" + dummy[i] + "</a>";
+			}
+			for(int i = 0; i < rounds; i++){
+				rowTwo += "<a href='/pugs/home'>" + dummy[rounds + i] + "</a>";
+			}
+			for(int i = 0; i < rounds; i++){
+				rowThree += "<a href='/pugs/home'>" + dummy[(rounds * 2) + i] + "</a>";
+			}
+			rowOne += "<a href='/pugs/home'>" + dummy[dummy.length - 1] + "</a>";
+		}else{
+			for(int i = 0; i < rounds; i++){
+				rowOne += "<a href='/pugs/home'>" + dummy[i] + "</a>";
+			}
+			for(int i = 0; i < rounds; i++){
+				rowTwo += "<a href='/pugs/home'>" + dummy[rounds + i] + "</a>";
+			}
+			for(int i = 0; i < rounds; i++){
+				rowThree += "<a href='/pugs/home'>" + dummy[(rounds * 2) + i] + "</a>";
+			}
+			rowOne += "<a href='/pugs/home'>" + dummy[dummy.length - 1] + "</a>";
+			rowTwo += "<a href='/pugs/home'>" + dummy[dummy.length - 2] + "</a>";
+		}
+		
+	}
 }
