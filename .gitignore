@@ -2,3 +2,4 @@
 spec/fixtures/repos/*
 target/playlistpug-0.0.1-SNAPSHOT/
 target/playlistpug-0.0.1-SNAPSHOT.war
+/target/
