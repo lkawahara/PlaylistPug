@@ -1,4 +1,4 @@
-package databaseInterface;
+package interfaces;
 
 import java.util.List;
 

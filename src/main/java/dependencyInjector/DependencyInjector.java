@@ -5,6 +5,19 @@ import java.util.Map;
 
 public class DependencyInjector implements DependencyInjectorTemplate<String, Object>
 {
+	/*Singleton*/
+	private static DependencyInjector instance = new DependencyInjector();
+	
+	private DependencyInjector()
+	{
+		
+	}
+	
+	public static DependencyInjector getInstance()
+	{
+		return instance;
+	}
+	/**/
 
 	Map<String, Object> storage = new HashMap<String, Object>();
 	

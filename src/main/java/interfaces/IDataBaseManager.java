@@ -1,4 +1,4 @@
-package databaseInterface;
+package interfaces;
 
 public interface IDataBaseManager
 {
