@@ -1,4 +1,4 @@
-package databaseInterface;
+package database;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +13,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.text.html.HTML.Tag;
 
+import interfaces.IDALpug;
 import models.Song;
 
-public class DummyDalPug implements IDALpug
+public class DummyDALpug implements IDALpug
 {	
 	static Song dummySong;
 	
@@ -33,7 +34,6 @@ public class DummyDalPug implements IDALpug
 			{
 				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
 				audioFormat = audioInputStream.getFormat();
-				//type = audioFormat.getEncoding().
 				size = audioInputStream.available();
 				songBytes = new byte[size];
 				audioInputStream.read(songBytes);
@@ -47,8 +47,7 @@ public class DummyDalPug implements IDALpug
 				e.printStackTrace();
 			}
 			
-			AudioFileFormat audioFileFormat = new AudioFileFormat(type, audioFormat, size);
-			dummySong = new Song(audioFileFormat, null, songBytes);
+			dummySong = new Song("LooneyToons", null, songBytes);
 		}
 	}
 	

@@ -1,17 +1,25 @@
 package databaseTesting;
 
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import database.DALpug;
 import edu.neumont.spring.config.MainConfig;
+import models.Song;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.AudioFileFormat.Type;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -21,11 +29,11 @@ public class DatabaseTesting {
 	
 	private void setup()
 	{
-		ApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 		basicDataSource = (BasicDataSource) context.getBean("dataSource");
 	}
 	
-	@Test
+	//@Test
 	public void connectToDatabase() 
 	{
 		setup();
@@ -44,7 +52,7 @@ public class DatabaseTesting {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void CreateATable() 
 	{
 		setup();
@@ -69,7 +77,7 @@ public class DatabaseTesting {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void CreateandDeleteATable() 
 	{
 		setup();
@@ -92,6 +100,47 @@ public class DatabaseTesting {
 		{
 			fail(e.getMessage());
 		}
+	}
+	
+	@Test
+	public void AddingSongToDatabase()
+	{
+		setup();
+		
+		DALpug dalpug = new DALpug();
+		Song song = getTestSong();
+		Long id = dalpug.add(song);
+		
+		if(id == 0l)
+		{
+			fail("Song was not added");
+		}
+	}
+	
+	//Helpers
+	Song getTestSong()
+	{
+		File soundFile = new File("/playlistpug/src/main/java/tempFiles/LooneyToonsEnd.wav");
+		byte[] songBytes = null;
+		
+		int size = 0;
+		try 
+		{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+			size = audioInputStream.available();
+			songBytes = new byte[size];
+			audioInputStream.read(songBytes);
+		} 
+		catch (UnsupportedAudioFileException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return new Song("LooneyToons", null, songBytes);
 	}
 
 }

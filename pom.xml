@@ -9,6 +9,7 @@
 	<properties>
 		<spring.version>4.1.4.RELEASE</spring.version>
 		<jettyVersion>8.1.16.v20140903</jettyVersion>
+		<exec.mainClass>main.Main</exec.mainClass>
 	</properties>
 
 	<dependencies>
@@ -190,7 +191,7 @@
 				<version>0.4.4</version>
 				<configuration>
 					<appName>playlistpug</appName>
-              </configuration>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
