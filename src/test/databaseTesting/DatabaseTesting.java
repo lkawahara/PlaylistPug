@@ -10,8 +10,13 @@ import models.Song;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -25,12 +30,16 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 public class DatabaseTesting {
 
-	BasicDataSource basicDataSource = null;
+	BasicDataSource basicDataSource;
+	DALpug dalpug;
+	Song testSong;
 	
 	private void setup()
 	{
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 		basicDataSource = (BasicDataSource) context.getBean("dataSource");
+		dalpug = new DALpug();
+		testSong = getTestSong();
 	}
 	
 	//@Test
@@ -106,35 +115,53 @@ public class DatabaseTesting {
 	public void AddingSongToDatabase()
 	{
 		setup();
-		
-		DALpug dalpug = new DALpug();
-		Song song = getTestSong();
-		Long id = dalpug.add(song);
+		Long id = dalpug.add(testSong);
 		
 		if(id == 0l)
 		{
 			fail("Song was not added");
+		}
+		
+		dalpug.dropTable();
+	}
+	
+	//@Test
+	public void GetSongByFromDatabase()
+	{
+		setup();
+		Long id = dalpug.add(testSong);
+		
+		testSongMatch(dalpug.getById(id), testSong, "The correct song was not returned: getById");
+		
+		dalpug.dropTable();
+	}
+	
+	private void testSongMatch(Song songReturned, Song testSong, String msg)
+	{
+		if(songReturned.equals(testSong))
+		{
+			fail(msg);
 		}
 	}
 	
 	//Helpers
 	Song getTestSong()
 	{
-		File soundFile = new File("/playlistpug/src/main/java/tempFiles/LooneyToonsEnd.wav");
+		String name = "/LooneyToonsEnd.wav";
+		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\LooneyToonsEnd.wav";
+		URL url = this.getClass().getResource(path);
 		byte[] songBytes = null;
 		
 		int size = 0;
 		try 
 		{
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-			size = audioInputStream.available();
+			File file = new File(path);
+			InputStream inputStream = new FileInputStream(file);
+			size = inputStream.available();
 			songBytes = new byte[size];
-			audioInputStream.read(songBytes);
+			inputStream.read(songBytes);
+			inputStream.close();
 		} 
-		catch (UnsupportedAudioFileException e)
-		{
-			e.printStackTrace();
-		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();

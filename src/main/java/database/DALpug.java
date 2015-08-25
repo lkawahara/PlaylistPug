@@ -36,10 +36,15 @@ public class DALpug implements IDALpug
 		tableStructure.append("Title VARCHAR(256), ");
 		tableStructure.append("Lyrics VARCHAR(1701), ");
 		tableStructure.append("Tags VARCHAR(1701), ");
-		tableStructure.append("Song VARBINARY(8000) ");
+		tableStructure.append("Song bytea");
 		tableStructure.append(")");
 		
 		dataBaseManager.createTable(tableStructure.toString());
+	}
+	
+	public boolean dropTable()
+	{
+		return dataBaseManager.deletetable(tableName);
 	}
 	
 	public DALpug()
