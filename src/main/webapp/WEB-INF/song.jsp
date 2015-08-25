@@ -13,11 +13,7 @@
 <a href="/pugs/search">Search</a>
 </nav>
 <p>Song</p>
-
-<h2>MP</h2>
-<p></p>
-<img src="/classes/META-INF/images/small_smile.png"/>
-<audio  src="/test.wav" type="audio/wav" controls preload="auto">		
+<audio  src="<%=request.getContextPath()%>/image/1" type="audio/wav" controls preload="auto">		
 </audio>
 
 <div id="songPlayer"><p>Song player here</p></div>
