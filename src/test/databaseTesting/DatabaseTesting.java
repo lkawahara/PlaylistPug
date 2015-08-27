@@ -10,21 +10,12 @@ import models.Song;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.sound.sampled.AudioFileFormat.Type;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -34,12 +25,18 @@ public class DatabaseTesting {
 	DALpug dalpug;
 	Song testSong;
 	
+	boolean setupCalled = false;
+	
 	private void setup()
 	{
-		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
-		basicDataSource = (BasicDataSource) context.getBean("dataSource");
-		dalpug = new DALpug();
-		testSong = getTestSong();
+		if(!setupCalled)
+		{
+			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+			basicDataSource = (BasicDataSource) context.getBean("dataSource");
+			dalpug = new DALpug();
+			testSong = getTestSong();
+			context.close();
+		}
 	}
 	
 	//@Test
@@ -111,7 +108,7 @@ public class DatabaseTesting {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void AddingSongToDatabase()
 	{
 		setup();
@@ -147,9 +144,8 @@ public class DatabaseTesting {
 	//Helpers
 	Song getTestSong()
 	{
-		String name = "/LooneyToonsEnd.wav";
-		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\LooneyToonsEnd.wav";
-		URL url = this.getClass().getResource(path);
+		String fileName = "LooneyToonsEnd.wav";
+		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
 		byte[] songBytes = null;
 		
 		int size = 0;

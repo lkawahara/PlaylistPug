@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -55,12 +56,16 @@ public class DataBaseManager
 			return resultSet;
 		}
 		
-		boolean executeUpdate(String query)
+		int executeUpdate(String query)
 		{
-			boolean result = false;
+			int result = 0;
 			try
 			{
-				result = (connection.prepareStatement(query).executeUpdate() < 0);
+				///PreparedStatement prepareStatement = connection.prepareStatement(query);
+				//result = (prepareStatement.executeUpdate() < 0);
+				//prepareStatement.close();
+				
+				result = (connection.prepareStatement(query).executeUpdate());
 			} 
 			catch (SQLException e) 
 			{
@@ -122,7 +127,7 @@ public class DataBaseManager
 		
 		
 		closeConnactionManagment(connactionManagment);
-		return false;
+		return successful;
 	}
 	
 	/**
@@ -144,7 +149,7 @@ public class DataBaseManager
 		}
 		
 		closeConnactionManagment(connactionManagment);
-		return false;
+		return successful;
 	}
 	
 	/**
@@ -201,25 +206,33 @@ public class DataBaseManager
 	 * @param Values
 	 * @return
 	 */
-	public boolean InsertIteam(String tableName, List<String> Values)
+	public int InsertIteam(String tableName, List<String> Values)
 	{
-		boolean result = false;
+		int result = 0;
 		ConnactionManagment connactionManagment = getConnactionManagment();
 		
 		if(connactionManagment != null)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append("INSERT INTO ");
-			stringBuilder.append("tableName ");
+			stringBuilder.append(tableName + " ");
 			
 			
 			stringBuilder.append("VALUES(");
-			for(String value : Values)
+			
+			int stop = Values.size();
+			
+			for(int step = 0; step < stop; step++)
 			{
 				stringBuilder.append("\'");
-				stringBuilder.append(value);
-				stringBuilder.append("\', ");
+				stringBuilder.append(Values.get(step));
+				stringBuilder.append("\'");
+				if(step + 1 < stop)
+				{
+					stringBuilder.append(", ");
+				}
 			}
+
 			stringBuilder.append(")");
 			
 			result = connactionManagment.executeUpdate(stringBuilder.toString());

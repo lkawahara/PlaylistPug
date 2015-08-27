@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -21,6 +22,7 @@ public class Song
 	{
 		this.data = data;
 		this.songData = songData;
+		this.tags = new ArrayList<>();
 		this.songName = songName;
 	}
 	
@@ -28,6 +30,7 @@ public class Song
 	{
 		this.data = data;
 		this.songData = songData;
+		this.tags = new ArrayList<>();
 		this.Lyrics = Lyrics;
 		this.songName = songName;
 	}

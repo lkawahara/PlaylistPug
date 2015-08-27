@@ -2,7 +2,6 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -24,56 +23,39 @@ public class DALpug implements IDALpug
 	
 	AtomicLong baseId = new AtomicLong(0);
 	
-	String tableName = "SongList";
-	StringBuilder tableStructure;
+	String songtableName = "songlist";
 	
-	private void setupTable()
+	public void dropTable()
 	{
-		tableStructure = new StringBuilder();
-		tableStructure.append(tableName);
-		tableStructure.append("(");
-		tableStructure.append("Id BIGINT PRIMARY KEY, ");
-		tableStructure.append("Title VARCHAR(256), ");
-		tableStructure.append("Lyrics VARCHAR(1701), ");
-		tableStructure.append("Tags VARCHAR(1701), ");
-		tableStructure.append("Song bytea");
-		tableStructure.append(")");
-		
-		dataBaseManager.createTable(tableStructure.toString());
-	}
-	
-	public boolean dropTable()
-	{
-		return dataBaseManager.deletetable(tableName);
+		dataBaseManager.deletetable(songtableName);
 	}
 	
 	public DALpug()
 	{
 		dataBaseManager = DataBaseManager.getInstance();
-		setupTable();
 	}
 	
 	@Override
 	public Long add(Song song)
 	{
-		ArrayList<String> values = seralizeSong(song);
+		ArrayList<String> values = serializeSong(song);
 		
-		boolean result = dataBaseManager.InsertIteam(tableName, values);
+		int result = dataBaseManager.InsertIteam(songtableName, values);
 		
-		if(!result)
+		if(result == 0)
 		{
 			logger.error("Failed to add Song");
 		}
 		
-		return baseId.get();
+		return new Long(result);
 	}
 
 	@Override
 	public Song getById(Long id)
 	{
-		ResultSet resultSet = dataBaseManager.Pulliteam(tableName, "", "Id = " + id, null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Id = " + id, null);
 		
-		Song song = deseralizeSong(resultSet);
+		Song song = deserializeSong(resultSet);
 		
 		return song;
 	}
@@ -81,9 +63,9 @@ public class DALpug implements IDALpug
 	@Override
 	public Song getByTitle(String title)
 	{
-		ResultSet resultSet = dataBaseManager.Pulliteam(tableName, "", "Title = " + title, null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Title = " + title, null);
 		
-		Song song = deseralizeSong(resultSet);
+		Song song = deserializeSong(resultSet);
 		
 		return song;
 	}
@@ -93,9 +75,9 @@ public class DALpug implements IDALpug
 	{
 		ArrayList<Tag> tags = new ArrayList<>();
 		tags.add(tag);
-		ResultSet resultSet = dataBaseManager.Pulliteam(tableName, "", "Tags = " + tags.toString(), null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Tags = " + tags.toString(), null);
 		
-		List<Song> songs = deseralizeMultipleSongs(resultSet);
+		List<Song> songs = deserializeMultipleSongs(resultSet);
 		
 		return songs;
 	}
@@ -103,9 +85,9 @@ public class DALpug implements IDALpug
 	@Override
 	public List<Song> getByTags(List<Tag> tags)
 	{
-		ResultSet resultSet = dataBaseManager.Pulliteam(tableName, "", "Tags = " + tags.toString(), null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Tags = " + tags.toString(), null);
 		
-		List<Song> songs = deseralizeMultipleSongs(resultSet);
+		List<Song> songs = deserializeMultipleSongs(resultSet);
 		
 		return songs;
 	}
@@ -117,15 +99,15 @@ public class DALpug implements IDALpug
 		whereCluase.append("CONTAINS(Lyrics, ");
 		whereCluase.append(Lyrics);
 		whereCluase.append(")");
-		ResultSet resultSet = dataBaseManager.Pulliteam(tableName, "", whereCluase.toString(), null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", whereCluase.toString(), null);
 		
-		List<Song> songs = deseralizeMultipleSongs(resultSet);
+		List<Song> songs = deserializeMultipleSongs(resultSet);
 		
 		return songs;
 	}
 	
 	//helpers
-	private ArrayList<String> seralizeSong(Song song)
+	private ArrayList<String> serializeSong(Song song)
 	{
 		ArrayList<String> values = new ArrayList<String>();
 		
@@ -135,11 +117,12 @@ public class DALpug implements IDALpug
 		values.add(song.getTitle());
 		values.add(song.getLyrics());
 		values.add(song.getTags().toString());
+		values.add(convertByteArrayToString(song.getSongData()));
 		
 		return values;
 	}
 	
-	private List<Song> deseralizeMultipleSongs(ResultSet resultSet)
+	private List<Song> deserializeMultipleSongs(ResultSet resultSet)
 	{
 		List<Song> songs = new ArrayList<>();
 		
@@ -147,7 +130,7 @@ public class DALpug implements IDALpug
 		{
 			while(resultSet.next())
 			{
-				songs.add(deseralizeSong(resultSet));
+				songs.add(deserializeSong(resultSet));
 			}
 		} 
 		catch (SQLException e)
@@ -159,7 +142,7 @@ public class DALpug implements IDALpug
 		return songs; 
 	}
 	
-	private Song deseralizeSong(ResultSet resultSet)
+	private Song deserializeSong(ResultSet resultSet)
 	{
 		Song song = null;
 		try {
@@ -176,9 +159,35 @@ public class DALpug implements IDALpug
 			logger.error("deseralizeSong: " + e.getMessage());
 		}
 		
-		
-		
 		return song;
+	}
+	
+	private String convertByteArrayToString(byte[] bytea)
+	{
+		StringBuilder stringForm = new StringBuilder();
+		
+		stringForm.append("[");
+		
+		int length = bytea.length;
+		
+		for(int step = 0; step < length; step++)
+		{
+			stringForm.append(bytea[step]);
+			
+			if((step + 1) < length)
+			{
+				stringForm.append(", ");
+			}
+		}
+		
+		for(byte b : bytea)
+		{
+			stringForm.append(b);
+		}
+		
+		stringForm.append("]");
+		
+		return stringForm.toString();
 	}
 
 }
