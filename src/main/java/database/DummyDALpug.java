@@ -22,24 +22,7 @@ public class DummyDALpug implements IDALpug
 		{
 			String fileName = "LooneyToonsEnd.wav";
 			String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
-			byte[] songBytes = null;
-			
-			int size = 0;
-			try 
-			{
-				File file = new File(path);
-				InputStream inputStream = new FileInputStream(file);
-				size = inputStream.available();
-				songBytes = new byte[size];
-				inputStream.read(songBytes);
-				inputStream.close();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			dummySong = new Song("LooneyToons", null, fileName);
+			dummySong = new Song("LooneyToons", null, path);
 		}
 	}
 	

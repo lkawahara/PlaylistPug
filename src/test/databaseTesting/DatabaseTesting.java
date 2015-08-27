@@ -108,7 +108,7 @@ public class DatabaseTesting {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void AddingSongToDatabase()
 	{
 		setup();
@@ -146,8 +146,8 @@ public class DatabaseTesting {
 	{
 		String fileName = "LooneyToonsEnd.wav";
 		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
+		/*
 		byte[] songBytes = null;
-		
 		int size = 0;
 		try 
 		{
@@ -162,8 +162,9 @@ public class DatabaseTesting {
 		{
 			e.printStackTrace();
 		}
+		*/
 		
-		return new Song("LooneyToons", null, fileName);
+		return new Song("LooneyToons", null, path);
 	}
 
 }
