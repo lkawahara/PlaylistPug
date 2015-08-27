@@ -8,7 +8,7 @@ import javax.swing.text.html.HTML.Tag;
 
 public class Song
 {
-	private final byte[] songData;
+	private final String songPath;
 	
 	private final Object data;
 	
@@ -18,35 +18,35 @@ public class Song
 	
 	private String Lyrics;
 	
-	public Song(String songName, Object data, byte[] songData)
+	public Song(String songName, Object data, String songPath)
 	{
 		this.data = data;
-		this.songData = songData;
+		this.songPath = songPath;
 		this.tags = new ArrayList<>();
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, byte[] songData, String Lyrics)
+	public Song(String songName, Object data, String songPath, String Lyrics)
 	{
 		this.data = data;
-		this.songData = songData;
+		this.songPath = songPath;
 		this.tags = new ArrayList<>();
 		this.Lyrics = Lyrics;
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, byte[] songData, List<Tag> tags)
+	public Song(String songName, Object data, String songPath, List<Tag> tags)
 	{
 		this.data = data;
-		this.songData = songData;
+		this.songPath = songPath;
 		this.tags = tags;
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, byte[] songData, List<Tag> tags, String Lyrics)
+	public Song(String songName, Object data, String songPath, List<Tag> tags, String Lyrics)
 	{
 		this.data = data;
-		this.songData = songData;
+		this.songPath = songPath;
 		this.tags = tags;
 		this.Lyrics = Lyrics;
 		this.songName = songName;
@@ -77,9 +77,9 @@ public class Song
 		return songName;
 	}
 
-	public byte[] getSongData()
+	public String getSongPath()
 	{
-		return songData;
+		return songPath;
 	}
 
 	public Object getData()

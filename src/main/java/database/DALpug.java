@@ -117,7 +117,7 @@ public class DALpug implements IDALpug
 		values.add(song.getTitle());
 		values.add(song.getLyrics());
 		values.add(song.getTags().toString());
-		values.add(convertByteArrayToString(song.getSongData()));
+		values.add(song.getSongPath());
 		
 		return values;
 	}
@@ -149,13 +149,12 @@ public class DALpug implements IDALpug
 			song = new Song(
 					resultSet.getString("Title"),
 					null,
-					resultSet.getBytes("Song"),
+					resultSet.getString("SongPath"),
 					resultSet.getString("Lyrics")
 					);
 		} 
 		catch (SQLException e) 
 		{
-			//e.printStackTrace();
 			logger.error("deseralizeSong: " + e.getMessage());
 		}
 		

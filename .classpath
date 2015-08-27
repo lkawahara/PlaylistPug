@@ -24,5 +24,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/postgresql-9.4-1201.jdbc41.jar"/>
+	<classpathentry kind="lib" path="src/jl1.0.jar"/>
+	<classpathentry kind="lib" path="src/mp3spi-1.9.4.1.jar"/>
+	<classpathentry kind="lib" path="src/tritonus-utils.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

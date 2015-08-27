@@ -55,7 +55,7 @@ public class DataBaseSetup implements ISetup
 		tableStructure.append("Title VARCHAR(256)");	tableStructure.append(", ");
 		tableStructure.append("Lyrics VARCHAR(1701)");	tableStructure.append(", ");
 		tableStructure.append("Tags VARCHAR(1701)");	tableStructure.append(", ");
-		tableStructure.append("Song bytea");			//tableStructure.append(", ");
+		tableStructure.append("SongPath VARCHAR(500)");     //tableStructure.append(", ");
 		tableStructure.append(")");
 		
 		buildTable(tableName, tableStructure);
