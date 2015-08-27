@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import models.AudioData;
+import models.GenreTag;
+
 import org.junit.Assert;
 
 //takes in an audioDataObject
@@ -13,25 +16,13 @@ import org.junit.Assert;
 //go through song score map and pick top 25 to create the playlist
 public class PlaylistCreator {
 	
-	private class AudioData{
-		public int getBpm() {
-			return 0;
-		}
-
-		public AudioGenreTag[] getTags() {
-			return null;
-		}
-
-		public boolean hasTag(AudioGenreTag tag) {
-			// TODO Auto-generated method stub
-			return false;
-		}};
-	private class AudioGenreTag {};
 	private class AudioDataService{
+		
 		public Set<AudioData> getAllSongs() {
 			return null;
 		}};
 	private AudioDataService songService; 
+	
 	private AudioData startingSong;
 	private AudioData [] playlist;
 	private static int NUM_SONGS = 10;
@@ -75,17 +66,16 @@ public class PlaylistCreator {
 	
 	int TAG_SCORE_INCR = 50;
 	private int compareToStartingSong(AudioData toCompare){
-		//generate a score
+		//generate a starting score
 		int compatibilityScore = 0;
-			//difference in bpm adversely affects score 
-			int bpmDiff = Math.abs(toCompare.getBpm() - startingSong.getBpm());
-			compatibilityScore -= bpmDiff;
 		
-		for(AudioGenreTag tag : toCompare.getTags()){
-			if(startingSong.hasTag(tag)){
-				compatibilityScore += TAG_SCORE_INCR;
-			}
-		}
+		//difference in bpm adversely affects score 
+		int bpmDiff = Math.abs(toCompare.getBPM() - startingSong.getBPM());
+		compatibilityScore -= bpmDiff;
+		
+		//matching tags adds to the score
+		compatibilityScore += TAG_SCORE_INCR * toCompare.getNumMatchingTags(startingSong.getTags());
+		
 		return compatibilityScore;
 	}
 }

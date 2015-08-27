@@ -1,6 +1,6 @@
 package models;
 
-public enum Tags 
+public enum GenreTag 
 {
 	//provide display name for display names of more than one word or with special characters
 		//all display names will be lower case
@@ -25,10 +25,10 @@ public enum Tags
 	Soul;
 	
 	private String displayName;
-	Tags(){
+	GenreTag(){
 		this.displayName = this.toString().toLowerCase();
 	}
-	Tags(String displayName){
+	GenreTag(String displayName){
 		this.displayName = displayName.toLowerCase();
 	}
 	public String GetDisplayName(){
