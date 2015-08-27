@@ -1,16 +1,12 @@
 package database;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFileFormat.Type;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.text.html.HTML.Tag;
 
 import interfaces.IDALpug;
@@ -24,30 +20,26 @@ public class DummyDALpug implements IDALpug
 	{
 		if(dummySong != null)
 		{
-			File soundFile = new File("/playlistpug/src/main/java/tempFiles/LooneyToonsEnd.wav");
+			String fileName = "LooneyToonsEnd.wav";
+			String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
 			byte[] songBytes = null;
-			Type type = Type.WAVE;
-			AudioFormat audioFormat = null;
 			
 			int size = 0;
 			try 
 			{
-				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-				audioFormat = audioInputStream.getFormat();
-				size = audioInputStream.available();
+				File file = new File(path);
+				InputStream inputStream = new FileInputStream(file);
+				size = inputStream.available();
 				songBytes = new byte[size];
-				audioInputStream.read(songBytes);
+				inputStream.read(songBytes);
+				inputStream.close();
 			} 
-			catch (UnsupportedAudioFileException e)
-			{
-				e.printStackTrace();
-			}
 			catch (IOException e) 
 			{
 				e.printStackTrace();
 			}
 			
-			dummySong = new Song("LooneyToons", null, songBytes);
+			dummySong = new Song("LooneyToons", null, fileName);
 		}
 	}
 	
