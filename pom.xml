@@ -201,6 +201,13 @@
 			<artifactId>mp3spi</artifactId>
 			<version>1.9.5-1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
