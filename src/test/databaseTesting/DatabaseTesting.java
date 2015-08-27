@@ -163,7 +163,7 @@ public class DatabaseTesting {
 			e.printStackTrace();
 		}
 		
-		return new Song("LooneyToons", null, "");
+		return new Song("LooneyToons", null, fileName);
 	}
 
 }
