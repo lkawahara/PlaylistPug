@@ -22,7 +22,8 @@ public enum GenreTag
 	Reggae,
 	Rock,
 	Ska,
-	Soul;
+	Soul, 
+	Soundtrack;
 	
 	private String displayName;
 	GenreTag(){
