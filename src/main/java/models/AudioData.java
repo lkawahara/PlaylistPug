@@ -33,6 +33,10 @@ public class AudioData {
 		return tags;
 	}
 	
+	public boolean hasTag(GenreTag tag){
+		return(tags.contains(tag));
+	}
+
 	public int getNumMatchingTags(Collection<GenreTag> matchingTags){
 		int numMatchingTags = 0;
 		for(GenreTag t : matchingTags){
@@ -41,14 +45,6 @@ public class AudioData {
 			}
 		}
 		return numMatchingTags;
-	}
-
-	public boolean hasTag(GenreTag tag){
-		return(tags.contains(tag));
-	}
-
-	public void addTag(GenreTag tag){
-		tags.add(tag);
 	}
 	
 	public int getBPM()
