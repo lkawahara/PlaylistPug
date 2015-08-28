@@ -18,10 +18,10 @@ S:\Pro280Projects\PlaylistPug\src\main\java\edu\neumont\spring\config\WebConfigu
 S:\Pro280Projects\PlaylistPug\src\main\java\com\badlogic\audio\io\MP3Decoder.java
 S:\Pro280Projects\PlaylistPug\src\main\java\setup\DependencyInjectorSetup.java
 S:\Pro280Projects\PlaylistPug\src\main\java\edu\neumont\spring\config\SecurityWebApplicationInitializer.java
-S:\Pro280Projects\PlaylistPug\src\main\java\models\Tags.java
 S:\Pro280Projects\PlaylistPug\src\main\java\dependencyInjector\DependencyInjectorTemplate.java
 S:\Pro280Projects\PlaylistPug\src\main\java\interfaces\IDALpug.java
 S:\Pro280Projects\PlaylistPug\src\main\java\database\DataBaseManager.java
+S:\Pro280Projects\PlaylistPug\src\main\java\models\GenreTag.java
 S:\Pro280Projects\PlaylistPug\src\main\java\interfaces\ISetup.java
 S:\Pro280Projects\PlaylistPug\src\main\java\models\AudioData.java
 S:\Pro280Projects\PlaylistPug\src\main\java\interfaces\IDataBaseManager.java
