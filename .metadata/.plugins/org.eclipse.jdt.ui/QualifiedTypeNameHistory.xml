@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="interfaces.IDALpug"/>
 <fullyQualifiedTypeName name="dependencyInjector.DependencyInjector"/>
@@ -16,3 +17,6 @@
 <fullyQualifiedTypeName name="org.apache.commons.fileupload.FileItem"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 </qualifiedTypeNameHistroy>
+=======
+<qualifiedTypeNameHistroy/>
+>>>>>>> 1e4fd463db9905ae888eea21c7b05cfd735e276a

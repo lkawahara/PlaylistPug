@@ -8,6 +8,7 @@ public class IDALTesting
 	@Test
 	public void GettingTheSongById() 
 	{
+		Long Id = 0l;
 		
 	}
 }
