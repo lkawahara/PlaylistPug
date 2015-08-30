@@ -76,33 +76,41 @@ public class PlaylistCreator {
 	}
 	
 	int TAG_SCORE_INCR = 50;
-	int TAG_MISMATCH_SCORE_DECR = -20;
+	int TAG_MISMATCH_SCORE_DECR = 20;
+	int STARTING_COMPATIBILITY_SCORE = Integer.MAX_VALUE;//for tree map purposes
+	int COMPATIBILITY_SCORE_CAP = Integer.MAX_VALUE;
+	//don't allow for negative numbers as compatibility scores 
+	//they will shoot that unlikely matching song to the front of the tree map
 	private int compareToStartingSong(AudioData toCompare){
 		//generate a starting score
-		int compatibilityScore = 0;
+		int compatibilityScore = STARTING_COMPATIBILITY_SCORE;
 		
 		//BPM adversely affects score
-		affectScoreBasedOnBPM(compatibilityScore, toCompare);
+		compatibilityScore = affectScoreBasedOnBPM(compatibilityScore, toCompare);
 		
 		//matching tags adds to the score
-		affectScoreBasedOnTags(compatibilityScore, toCompare);
+		compatibilityScore = affectScoreBasedOnTags(compatibilityScore, toCompare);
 		
 		return compatibilityScore;
 	}
 	
 	//returns bpm difference
 	private int affectScoreBasedOnBPM(int compatibilityScore, AudioData toCompare){
-		int bpmDiff = Math.abs(toCompare.getBPM() - startingSong.getBPM());
-		compatibilityScore -= bpmDiff;
-		return bpmDiff;
+		compatibilityScore += Math.abs(toCompare.getBPM() - startingSong.getBPM());
+		return clamp(compatibilityScore, 0, COMPATIBILITY_SCORE_CAP);
 	}
 	
-	private void affectScoreBasedOnTags(int compatibilityScore, AudioData toCompare){
+	private int affectScoreBasedOnTags(int compatibilityScore, AudioData toCompare){
 		Collection<GenreTag> toCompareTags = toCompare.getTags();
 		for(GenreTag tag : startingSong.getTags()){
 			//increase/decrease score based on matching/mismatching tag
-			compatibilityScore = (toCompareTags.contains(tag)) ? (compatibilityScore + TAG_SCORE_INCR) : (compatibilityScore + TAG_MISMATCH_SCORE_DECR);
+			compatibilityScore = (toCompareTags.contains(tag)) ? (compatibilityScore - TAG_SCORE_INCR) : (compatibilityScore + TAG_MISMATCH_SCORE_DECR);
 		}
+		return clamp(compatibilityScore, 0, COMPATIBILITY_SCORE_CAP);
+	}
+	
+	public static int clamp(int val, int min, int max) {
+	    return Math.max(min, Math.min(max, val));
 	}
 	
 	//current functionality:

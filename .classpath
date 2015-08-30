@@ -19,9 +19,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/postgresql-9.4-1201.jdbc41.jar"/>
-	<classpathentry kind="lib" path="src/jl1.0.jar"/>
-	<classpathentry kind="lib" path="src/mp3spi-1.9.4.1.jar"/>
-	<classpathentry kind="lib" path="src/tritonus-utils.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
