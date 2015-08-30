@@ -4,9 +4,13 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.badlogic.audio.io.MP3Decoder;
+
 public class AudioData {
 
 	private int bpm;
+	private float startVolume;
+	private float endVolume;
 	private Collection<GenreTag> tags;
 	
 	public AudioData(FileInputStream fileInputStream)
@@ -20,9 +24,24 @@ public class AudioData {
 		tags.addAll(matchingTags);
 	}
 	
+	//debug constructors
+	public AudioData(int bpm){
+		this.bpm = bpm;
+		tags = new ArrayList<GenreTag>();
+	}
+	public AudioData(int bpm, Collection<GenreTag> matchingTags){
+		this.bpm = bpm;
+		tags.addAll(matchingTags);
+	}
+	
 	public void AudioDataHelper(FileInputStream fileInputStream){
 		try {
-			bpm = new BeatDetector().calculateBPM(fileInputStream);
+			MP3Decoder beatDecoder = new MP3Decoder(fileInputStream);
+			MP3Decoder volumeDecoder = new MP3Decoder(fileInputStream);
+			bpm = new BeatDetector().calculateBPM(beatDecoder);
+			VolumeAnalyzer va = new VolumeAnalyzer(volumeDecoder);
+			startVolume = va.getStartVolume();
+			endVolume = va.getEndVolume();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,6 +69,14 @@ public class AudioData {
 	public int getBPM()
 	{
 		return bpm;
+	}
+	
+	public float getStartVolume() {
+		return startVolume;
+	}
+
+	public float getEndVolume() {
+		return endVolume;
 	}
 	
 }

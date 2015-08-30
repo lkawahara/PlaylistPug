@@ -226,35 +226,9 @@
 	<build>
 		<plugins>
 			<plugin>
-			  <groupId>de.saumya.mojo</groupId>
-			  <artifactId>gem-maven-plugin</artifactId>
-			  <version>1.0.10</version>
-			  <configuration>
-				<execArgLines>
-				  <execArgLine>${project.build.directory}/rubygems/bin/travis</execArgLine>
-				  <execArgLine>encrypt</execArgLine>
-				  <execArgLine>HEROKU_API_KEY=${herokuApiKey}</execArgLine>
-				</execArgLines>
-			  </configuration>
-			  <dependencies>
-				<dependency>
-				  <groupId>rubygems</groupId>
-				  <artifactId>travis</artifactId>
-				  <version>1.8.0</version>
-				  <type>gem</type>
-				</dependency>
-				<dependency>
-				  <groupId>rubygems</groupId>
-				  <artifactId>pry</artifactId>
-				  <version>0.10.1</version>
-				  <type>gem</type>
-				</dependency>
-			  </dependencies>
-			</plugin>
-			<plugin>
 				<groupId>com.heroku.sdk</groupId>
 				<artifactId>heroku-maven-plugin</artifactId>
-				<version>0.4.4</version>
+				<version>0.5.1</version>
 				<configuration>
 					<appName>playlistpug</appName>
                 </configuration>
@@ -281,29 +255,6 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jettyVersion}</version>
 			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals><goal>copy</goal></goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.github.jsimone</groupId>
-									<artifactId>webapp-runner</artifactId>
-									<version>8.0.24.0</version>
-									<destFileName>webapp-runner.jar</destFileName>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>
