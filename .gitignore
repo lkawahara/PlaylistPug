@@ -1,3 +1,4 @@
 *.swp
+*.class
 spec/fixtures/repos/*
 /target/

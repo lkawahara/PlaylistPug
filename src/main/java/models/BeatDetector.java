@@ -13,9 +13,9 @@ public class BeatDetector {
 	private static final float secondsPerSample = HOP_SIZE/44100f;
 	private static final int SAMPLE_BUFFER_SIZE = 100;
 	
-	public int calculateBPM(FileInputStream fileInputStream) throws Exception
+	public int calculateBPM(MP3Decoder decoder) throws Exception
 	{
-		ArrayList<Float> spectralFlux = getSpectralFlux(fileInputStream);
+		ArrayList<Float> spectralFlux = getSpectralFlux(decoder);
 		@SuppressWarnings("unchecked")
 		ArrayList<Float> beatsDetected = (ArrayList<Float>) spectralFlux.clone();
 		float[] currentSampleBuffer = new float[SAMPLE_BUFFER_SIZE];
@@ -67,9 +67,8 @@ public class BeatDetector {
 		return total/(buffer.length-zeroCount);
 	}
 	
-	private ArrayList<Float> getSpectralFlux(FileInputStream fileInputStream) throws Exception
+	private ArrayList<Float> getSpectralFlux(MP3Decoder decoder ) throws Exception
 	{
-		MP3Decoder decoder = new MP3Decoder(fileInputStream);
 		SpectrumProvider spectrumProvider = new SpectrumProvider( decoder, 1024, HOP_SIZE, true );			
 		float[] spectrum = spectrumProvider.nextSpectrum();
 		float[] lastSpectrum = new float[spectrum.length];
