@@ -33,7 +33,7 @@ public class BeatDetector {
 			if(spectralFlux.get(i)>(averageSampleValue *1.03f) && spectralFlux.get(i) < previousSampleValue && previousSampleValue > previousPreviousSampleValue) 
 			{
 				beatCount++;
-				System.out.println(timeStamp + ": " + spectralFlux.get(i));
+				//System.out.println(timeStamp + ": " + spectralFlux.get(i));
 
 			}
 			else

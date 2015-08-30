@@ -20,6 +20,16 @@ public class AudioData {
 		tags.addAll(matchingTags);
 	}
 	
+	//debug constructors
+	public AudioData(int bpm){
+		this.bpm = bpm;
+		tags = new ArrayList<GenreTag>();
+	}
+	public AudioData(int bpm, Collection<GenreTag> matchingTags){
+		this.bpm = bpm;
+		tags.addAll(matchingTags);
+	}
+	
 	public void AudioDataHelper(FileInputStream fileInputStream){
 		try {
 			bpm = new BeatDetector().calculateBPM(fileInputStream);
