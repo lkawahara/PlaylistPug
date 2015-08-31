@@ -34,13 +34,13 @@ public class MainConfig
         String password = dbUri.getUserInfo().split(":")[1];
         String dbUrl = "";
         
-        /* Spring/Java && JDBC*/
+        // Spring/Java && JDBC
         dbUrl = "jdbc:postgresql://" +
 		        dbUri.getHost() + ':' +
 		        dbUri.getPort() +
 		        dbUri.getPath() +
 		        "?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
-        /**/
+
         
         @SuppressWarnings("unused")
 		Connection connection = DriverManager.getConnection(dbUrl, username, password);
