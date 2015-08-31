@@ -4,18 +4,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Home</title>
+<title>${name}</title>
 </head>
 <body>
-<div id="header">
-<h1>Welcome to PugPlaylist!</h1>
-</div>
-<div id="navBar">
+<nav>
 <a href="/pugs/index">Home</a>
 <a href="/pugs/upload">Upload</a>
 <a href="/pugs/search">Search</a>
+</nav>
+<p>Song</p>
+<audio  src="<%=request.getContextPath()%>/image/1" type="audio/wav" controls preload="auto">		
+</audio>
+
+<div id="songPlayer"><p>Song player here</p></div>
+<div id="playerButtonBar">
+<p>Play/Pause Button</p>
+<form action='/pugs/song/nextSong/${sid}' method='post'>
+<input type="submit" value="Next Song"/>
+</form>
 </div>
-<img src="http://i.imgur.com/PugI0QN.jpg"/>
-<p>Index</p>
 </body>
 </html>
