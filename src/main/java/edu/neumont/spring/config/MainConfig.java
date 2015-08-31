@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MainConfig 
 {
-	/*
 	private static final String DATABASE_URL = "postgres://maphiawdhrurgw:PL4ApC1CK2qpN0XxBCfNJwehBU@ec2-54-163-228-0.compute-1.amazonaws.com:5432/d9tiku6olid4s7";
 	
     @Bean(name="dataSource")
@@ -53,5 +52,4 @@ public class MainConfig
         
         return basicDataSource;
     }
-*/
 }
