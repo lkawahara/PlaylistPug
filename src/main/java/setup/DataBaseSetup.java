@@ -51,11 +51,11 @@ public class DataBaseSetup implements ISetup
 		tableName = "songlist";
 		tableStructure.append(tableName);
 		tableStructure.append("(");
-		tableStructure.append("Id SERIAL PRIMARY KEY"); tableStructure.append(", ");
-		tableStructure.append("Title VARCHAR(256)");	tableStructure.append(", ");
-		tableStructure.append("Lyrics VARCHAR(1701)");	tableStructure.append(", ");
-		tableStructure.append("Tags VARCHAR(1701)");	tableStructure.append(", ");
-		tableStructure.append("SongPath VARCHAR(500)");     //tableStructure.append(", ");
+		tableStructure.append("\"id\" SERIAL PRIMARY KEY"); tableStructure.append(", ");
+		tableStructure.append("\"title\" VARCHAR(256)");	tableStructure.append(", ");
+		tableStructure.append("\"lyrics\" VARCHAR(1701)");	tableStructure.append(", ");
+		tableStructure.append("\"tags\" VARCHAR(1701)");	tableStructure.append(", ");
+		tableStructure.append("\"songPath\" VARCHAR(500)");     //tableStructure.append(", ");
 		tableStructure.append(")");
 		
 		buildTable(tableName, tableStructure);

@@ -3,9 +3,6 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.swing.text.html.HTML.Tag;
-
 public class Song
 {
 	private final String songPath;
@@ -14,7 +11,7 @@ public class Song
 	
 	private final String songName;
 	
-	private List<Tag> tags;
+	private List<GenreTag> tags;
 	
 	private String Lyrics;
 	
@@ -35,7 +32,7 @@ public class Song
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, String songPath, List<Tag> tags)
+	public Song(String songName, Object data, String songPath, List<GenreTag> tags)
 	{
 		this.data = data;
 		this.songPath = songPath;
@@ -43,7 +40,7 @@ public class Song
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, String songPath, List<Tag> tags, String Lyrics)
+	public Song(String songName, Object data, String songPath, List<GenreTag> tags, String Lyrics)
 	{
 		this.data = data;
 		this.songPath = songPath;
@@ -52,12 +49,12 @@ public class Song
 		this.songName = songName;
 	}
 	
-	public List<Tag> getTags() 
+	public List<GenreTag> getTags() 
 	{
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) 
+	public void setTags(List<GenreTag> tags) 
 	{
 		this.tags = tags;
 	}
@@ -85,6 +82,51 @@ public class Song
 	public Object getData()
 	{
 		return data;
+	}
+	
+	@Override
+	public int hashCode() 
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((Lyrics == null) ? 0 : Lyrics.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((songName == null) ? 0 : songName.hashCode());
+		result = prime * result + ((songPath == null) ? 0 : songPath.hashCode());
+		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		Song otherSong = (Song) obj;
+		boolean result = true;
+		
+		if(!this.songPath.equals(otherSong.getSongPath()))
+		{
+			result = false;
+		}
+		/*
+		else if(!this.data.equals(otherSong.getData()))
+		{
+			result = false;
+		}
+		*/
+		else if(!this.songName.equals(otherSong.getTitle()))
+		{
+			result = false;
+		}
+		else if(!this.tags.equals(otherSong.getTags()))
+		{
+			result = false;
+		}
+		else if(!this.Lyrics.equals(otherSong.getLyrics()))
+		{
+			result = false;
+		}
+		
+		return result;
 	}
 	
 	

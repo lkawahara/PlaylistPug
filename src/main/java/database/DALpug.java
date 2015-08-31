@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.swing.text.html.HTML.Tag;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import interfaces.IDALpug;
+import models.GenreTag;
 import models.Song;
 
 public class DALpug implements IDALpug 
@@ -53,9 +52,11 @@ public class DALpug implements IDALpug
 	@Override
 	public Song getById(Long id)
 	{
-		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Id = " + id, null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "ID = " + id, "", "");
 		
 		Song song = deserializeSong(resultSet);
+		
+		closeResults(resultSet);
 		
 		return song;
 	}
@@ -63,45 +64,80 @@ public class DALpug implements IDALpug
 	@Override
 	public Song getByTitle(String title)
 	{
-		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Title = " + title, null);
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "title = " + title, "", "");
 		
 		Song song = deserializeSong(resultSet);
+		
+		closeResults(resultSet);
 		
 		return song;
 	}
 
 	@Override
-	public List<Song> getByTag(Tag tag)
+	public List<Song> getByTag(GenreTag tag)
 	{
-		ArrayList<Tag> tags = new ArrayList<>();
+		ArrayList<GenreTag> tags = new ArrayList<>();
 		tags.add(tag);
-		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Tags = " + tags.toString(), null);
+		
+		StringBuilder cluase = new StringBuilder();
+		cluase.append("tags = ");
+		cluase.append("\'");
+		cluase.append(tags.toString());
+		cluase.append("\'");
+		
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", cluase.toString(), "", "");
 		
 		List<Song> songs = deserializeMultipleSongs(resultSet);
+		
+		closeResults(resultSet);
 		
 		return songs;
 	}
 
 	@Override
-	public List<Song> getByTags(List<Tag> tags)
+	public List<Song> getByTags(List<GenreTag> tags)
 	{
-		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "Tags = " + tags.toString(), null);
+		StringBuilder cluase = new StringBuilder();
+		cluase.append("tags = ");
+		cluase.append("\'");
+		cluase.append(tags.toString());
+		cluase.append("\'");
+		
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", cluase.toString(), "", "");
 		
 		List<Song> songs = deserializeMultipleSongs(resultSet);
+		
+		closeResults(resultSet);
 		
 		return songs;
 	}
 
 	@Override
-	public List<Song> getByLyrics(String Lyrics) 
+	public List<Song> getByLyrics(String lyrics) 
 	{
-		StringBuilder whereCluase = new StringBuilder();
-		whereCluase.append("CONTAINS(Lyrics, ");
-		whereCluase.append(Lyrics);
-		whereCluase.append(")");
-		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", whereCluase.toString(), null);
+		StringBuilder Cluase = new StringBuilder();
+		Cluase.append("\"lyrics\" LIKE ");
+		Cluase.append("\'%");
+		Cluase.append(lyrics);
+		Cluase.append("%\'");
+		
+		/**
+		Cluase.append("regexp_matches(lyrics, ");
+		Cluase.append(lyrics);
+		Cluase.append(")");
+		/**/
+		
+		/**
+		Cluase.append("lyrics LIKE ");
+		//Cluase.append("\'");
+		Cluase.append(lyrics);
+		//ssCluase.append("\'");
+		/**/
+		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "",  Cluase.toString(), "", "");
 		
 		List<Song> songs = deserializeMultipleSongs(resultSet);
+		
+		closeResults(resultSet);
 		
 		return songs;
 	}
@@ -146,12 +182,13 @@ public class DALpug implements IDALpug
 	{
 		Song song = null;
 		try {
-			song = new Song(
-					resultSet.getString("Title"),
-					null,
-					resultSet.getString("SongPath"),
-					resultSet.getString("Lyrics")
-					);
+				song = new Song(
+						resultSet.getString("Title"),
+						null,
+						resultSet.getString("SongPath"),
+						convertStringToGenreTagList(resultSet.getString("tags")),
+						resultSet.getString("Lyrics")
+						);
 		} 
 		catch (SQLException e) 
 		{
@@ -161,6 +198,35 @@ public class DALpug implements IDALpug
 		return song;
 	}
 	
+	private List<GenreTag> convertStringToGenreTagList(String tags)
+	{
+		String fixed = tags;
+		fixed = fixed.replace("[", "");
+		fixed = fixed.replace("]", "");
+		String[] tagsSplit = fixed.split(",");
+		List<GenreTag> finalTags = new ArrayList<GenreTag>();
+		
+		for(String tag : tagsSplit)
+		{
+			finalTags.add(GenreTag.valueOf(tag));
+		}
+		
+		return finalTags;
+	}
+	
+	private void closeResults(ResultSet resultSet)
+	{
+		try 
+		{
+			resultSet.close();
+		} 
+		catch (SQLException e) 
+		{
+			logger.error("closeResults: " + e.getMessage());
+		}
+	}
+	
+	/*
 	private String convertByteArrayToString(byte[] bytea)
 	{
 		StringBuilder stringForm = new StringBuilder();
@@ -188,5 +254,6 @@ public class DALpug implements IDALpug
 		
 		return stringForm.toString();
 	}
+	*/
 
 }

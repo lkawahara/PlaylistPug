@@ -6,16 +6,16 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import database.DALpug;
 import edu.neumont.spring.config.MainConfig;
+import models.GenreTag;
 import models.Song;
+import setup.MasterSetup;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -31,6 +31,7 @@ public class DatabaseTesting {
 	{
 		if(!setupCalled)
 		{
+			MasterSetup.getInstance().run();
 			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 			basicDataSource = (BasicDataSource) context.getBean("dataSource");
 			dalpug = new DALpug();
@@ -108,37 +109,84 @@ public class DatabaseTesting {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void AddingSongToDatabase()
 	{
 		setup();
 		Long id = dalpug.add(testSong);
 		
+		/**/
 		if(id == 0l)
 		{
 			fail("Song was not added");
 		}
+		/**/
 		
 		dalpug.dropTable();
 	}
 	
 	//@Test
-	public void GetSongByFromDatabase()
+	public void GetSongByID()
 	{
 		setup();
 		Long id = dalpug.add(testSong);
 		
-		testSongMatch(dalpug.getById(id), testSong, "The correct song was not returned: getById");
+		testSongMatch(dalpug.getById(id), testSong, "The correct song was not returned: GetSongByID");
+		
+		dalpug.dropTable();
+	}
+	
+	//@Test
+	public void GetSongByLyrics()
+	{
+		setup();
+		Long id = dalpug.add(testSong);
+		
+		testSongMatchList(dalpug.getByLyrics("NA"), testSong, "The correct song was not returned: GetSongByLyrics");
+		
+		dalpug.dropTable();
+	}
+	
+	@Test
+	public void GetSongByTag()
+	{
+		setup();
+		Long id = dalpug.add(testSong);
+		
+		testSongMatchList(dalpug.getByTag(GenreTag.Classical), testSong, "The correct song was not returned: GetSongByTag");
 		
 		dalpug.dropTable();
 	}
 	
 	private void testSongMatch(Song songReturned, Song testSong, String msg)
 	{
-		if(songReturned.equals(testSong))
+		if(!testSong(songReturned, testSong))
 		{
 			fail(msg);
 		}
+	}
+	
+	private void testSongMatchList(List<Song> songsReturned, Song testSong, String msg)
+	{
+		boolean matchFound = false;
+		for(Song song : songsReturned)
+		{
+			matchFound = testSong(song, testSong);
+			if(matchFound)
+			{
+				break;
+			}
+		}
+		
+		if(!matchFound)
+		{
+			fail(msg);
+		}
+	}
+	
+	private boolean testSong(Song songReturned, Song testSong)
+	{
+		return testSong.equals(songReturned);
 	}
 	
 	//Helpers
@@ -146,25 +194,10 @@ public class DatabaseTesting {
 	{
 		String fileName = "LooneyToonsEnd.wav";
 		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
-		/*
-		byte[] songBytes = null;
-		int size = 0;
-		try 
-		{
-			File file = new File(path);
-			InputStream inputStream = new FileInputStream(file);
-			size = inputStream.available();
-			songBytes = new byte[size];
-			inputStream.read(songBytes);
-			inputStream.close();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		*/
-		
-		return new Song("LooneyToons", null, path);
+		String Lyrics = "NA";
+		List<GenreTag> tags = new ArrayList<>();
+		tags.add(GenreTag.Classical);
+		return new Song("LooneyToons", null, path, tags, Lyrics);
 	}
 
 }
