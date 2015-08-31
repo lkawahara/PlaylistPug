@@ -9,6 +9,8 @@ S:\Pro280Projects\PlaylistPug\src\main\java\com\badlogic\audio\io\AudioDevice.ja
 S:\Pro280Projects\PlaylistPug\src\main\java\setup\MasterSetup.java
 S:\Pro280Projects\PlaylistPug\src\main\java\com\badlogic\audio\io\Decoder.java
 S:\Pro280Projects\PlaylistPug\src\main\java\edu\neumont\java\playlistpug\PugServlet.java
+S:\Pro280Projects\PlaylistPug\src\main\java\playlistCreation\PlaylistCreatorTest.java
+S:\Pro280Projects\PlaylistPug\src\main\java\models\VolumeAnalyzer.java
 S:\Pro280Projects\PlaylistPug\src\main\java\edu\neumont\java\playlistpug\ImageServlet.java
 S:\Pro280Projects\PlaylistPug\src\main\java\edu\neumont\spring\config\PersistenceConfig.java
 S:\Pro280Projects\PlaylistPug\src\main\java\com\badlogic\audio\analysis\SpectrumProvider.java
