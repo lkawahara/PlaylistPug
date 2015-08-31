@@ -11,4 +11,5 @@ notifications:
       - tdacus@student.neumont.edu
       - bauxer@student.neumont.edu
       - lringleka@student.neumont.edu
-    on_failure: [always] # default: always
+    on_success: change
+    on_failure: always
