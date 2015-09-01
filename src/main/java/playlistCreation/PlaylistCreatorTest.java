@@ -10,6 +10,7 @@ import java.util.List;
 import junit.framework.Assert;
 import models.AudioData;
 import models.GenreTag;
+import models.Song;
 
 import org.junit.Test;
 
@@ -20,12 +21,12 @@ public class PlaylistCreatorTest {
 	@Test 
 	public void PlaylistCreatorTestTest(){
 		PlaylistCreator pc = new PlaylistCreator(getDummyBPMSongs());
-		AudioData[] generatedPlaylist = pc.getPlaylist();
+		Song[] generatedPlaylist = pc.getPlaylist();
 		
 		int currBPM = 3000;
 		//can be increasing or decreasing in bpm
-		for(AudioData song : generatedPlaylist){
-			int songBPM = song.getBPM();
+		for(Song song : generatedPlaylist){
+			int songBPM = song.getData().getBPM();
 			Assert.assertTrue(songBPM < currBPM);
 			currBPM = songBPM;
 		}
@@ -36,12 +37,12 @@ public class PlaylistCreatorTest {
 	@Test 
 	public void OrderPlaylistByBPM() throws IOException {
 		PlaylistCreator pc = new PlaylistCreator(getSongs());
-		AudioData[] generatedPlaylist = pc.getPlaylist();
+		Song[] generatedPlaylist = pc.getPlaylist();
 		
 		int currBPM = 3000;
 		//can be increasing or decreasing in bpm
-		for(AudioData song : generatedPlaylist){
-			int songBPM = song.getBPM();
+		for(Song song : generatedPlaylist){
+			int songBPM = song.getData().getBPM();
 			Assert.assertTrue(songBPM < currBPM);
 			currBPM = songBPM;
 		}
@@ -50,45 +51,45 @@ public class PlaylistCreatorTest {
 	//@Test
 	public void OrderPlaylistByCloserBPM() throws IOException {
 		PlaylistCreator pc = new PlaylistCreator(getCloserBPMSongs());
-		AudioData[] generatedPlaylist = pc.getPlaylist();
+		Song[] generatedPlaylist = pc.getPlaylist();
 		
 		int currBPM = 3000;
-		for(AudioData song : generatedPlaylist){
-			int songBPM = song.getBPM();
+		for(Song song : generatedPlaylist){
+			int songBPM = song.getData().getBPM();
 			Assert.assertTrue(songBPM < currBPM);
 			currBPM = songBPM;
 		}
 	}
 	
-	//@Test
+	@Test
 	public void OrderPlaylistByTag() throws IOException {
 		PlaylistCreator pc = new PlaylistCreator(getTagSongs());
-		AudioData[] generatedPlaylist = pc.getPlaylist();
+		Song[] generatedPlaylist = pc.getPlaylist();
 		
 		int currBPM = 3000;
-		for(AudioData song : generatedPlaylist){
-			int songBPM = song.getBPM();
+		for(Song song : generatedPlaylist){
+			int songBPM = song.getData().getBPM();
 			Assert.assertTrue(songBPM < currBPM);
 			currBPM = songBPM;
 		}
 	}
 	
-	private List<AudioData> getDummyBPMSongs(){
-		List<AudioData> songs = new ArrayList<>();
+	private List<Song> getDummyBPMSongs(){
+		List<Song> songs = new ArrayList<>();
 
-		songs.add(new AudioData(170));
-		songs.add(new AudioData(150));
-		songs.add(new AudioData(130));
-		songs.add(new AudioData(110));
-		songs.add(new AudioData(90));
-		songs.add(new AudioData(70));
-		songs.add(new AudioData(50));
+		songs.add(new Song(new AudioData(170)));
+		songs.add(new Song(new AudioData(150)));
+		songs.add(new Song(new AudioData(130)));
+		songs.add(new Song(new AudioData(110)));
+		songs.add(new Song(new AudioData(90)));
+		songs.add(new Song(new AudioData(70)));
+		songs.add(new Song(new AudioData(50)));
 		
 		return songs;
 	}
 	
-	private List<AudioData> getSongs(){
-		List<AudioData> songs = new ArrayList<>();
+	private List<Song> getSongs(){
+		List<Song> songs = new ArrayList<>();
 		//http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500002
 		AudioData bpm170 = null, bpm150 = null, bpm130 = null, bpm110 = null, bpm90 = null;
 		try {
@@ -105,16 +106,16 @@ public class PlaylistCreatorTest {
 		} catch (FileNotFoundException e) {
 			System.out.println("file not found: " + e.getMessage());
 		}
-		songs.add(bpm170);
-		songs.add(bpm150);
-		songs.add(bpm130);
-		songs.add(bpm110);
-		songs.add(bpm90);
+		songs.add(new Song(bpm170));
+		songs.add(new Song(bpm150));
+		songs.add(new Song(bpm130));
+		songs.add(new Song(bpm110));
+		songs.add(new Song(bpm90));
 		return songs;
 	}
 	
-	private List<AudioData> getCloserBPMSongs(){
-		List<AudioData> songs = new ArrayList<>();
+	private List<Song> getCloserBPMSongs(){
+		List<Song> songs = new ArrayList<>();
 		//http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500002
 		AudioData bpm170 = null, bpm165 = null, bpm160 = null, bpm155 = null, bpm150 = null;
 		try {
@@ -130,16 +131,16 @@ public class PlaylistCreatorTest {
 		} catch (FileNotFoundException e) {
 			System.out.println("file not found: " + e.getMessage());
 		}
-		songs.add(bpm170);
-		songs.add(bpm165);
-		songs.add(bpm160);
-		songs.add(bpm155);
-		songs.add(bpm150);
+		songs.add(new Song(bpm170));
+		songs.add(new Song(bpm165));
+		songs.add(new Song(bpm160));
+		songs.add(new Song(bpm155));
+		songs.add(new Song(bpm150));
 		return songs;
 	}
 	
-	private List<AudioData> getTagSongs(){
-		List<AudioData> songs = new ArrayList<>();
+	private List<Song> getTagSongs(){
+		List<Song> songs = new ArrayList<>();
 		//http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500002
 		AudioData bpm170 = null, bpm165 = null, bpm160 = null, bpm155 = null, bpm150 = null;
 		try {
@@ -155,11 +156,11 @@ public class PlaylistCreatorTest {
 		} catch (FileNotFoundException e) {
 			System.out.println("file not found: " + e.getMessage());
 		}
-		songs.add(bpm170);
-		songs.add(bpm165);
-		songs.add(bpm160);
-		songs.add(bpm155);
-		songs.add(bpm150);
+		songs.add(new Song(bpm170));
+		songs.add(new Song(bpm165));
+		songs.add(new Song(bpm160));
+		songs.add(new Song(bpm155));
+		songs.add(new Song(bpm150));
 		return songs;
 	}
 };

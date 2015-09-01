@@ -3,22 +3,19 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.swing.text.html.HTML.Tag;
-
 public class Song
 {
 	private final String songPath;
 	
-	private final Object data;
+	private final AudioData data;
 	
 	private final String songName;
 	
-	private List<Tag> tags;
+	private List<GenreTag> tags;
 	
-	private String Lyrics;
+	private String lyrics;
 	
-	public Song(String songName, Object data, String songPath)
+	public Song(String songName, AudioData data, String songPath)
 	{
 		this.data = data;
 		this.songPath = songPath;
@@ -26,16 +23,16 @@ public class Song
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, String songPath, String Lyrics)
+	public Song(String songName, AudioData data, String songPath, String lyrics)
 	{
 		this.data = data;
 		this.songPath = songPath;
 		this.tags = new ArrayList<>();
-		this.Lyrics = Lyrics;
+		this.lyrics = lyrics;
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, String songPath, List<Tag> tags)
+	public Song(String songName, AudioData data, String songPath, List<GenreTag> tags)
 	{
 		this.data = data;
 		this.songPath = songPath;
@@ -43,33 +40,41 @@ public class Song
 		this.songName = songName;
 	}
 	
-	public Song(String songName, Object data, String songPath, List<Tag> tags, String Lyrics)
+	public Song(String songName, AudioData data, String songPath, List<GenreTag> tags, String lyrics)
 	{
 		this.data = data;
 		this.songPath = songPath;
 		this.tags = tags;
-		this.Lyrics = Lyrics;
+		this.lyrics = lyrics;
 		this.songName = songName;
 	}
 	
-	public List<Tag> getTags() 
+	public Song(AudioData data){
+		this.data = data;
+		this.songName = String.valueOf(data.getBPM());
+		this.songPath = null;
+		this.tags = new ArrayList<GenreTag>();
+		this.lyrics = "not entered";
+	}
+	
+	public List<GenreTag> getTags() 
 	{
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) 
+	public void setTags(List<GenreTag> tags) 
 	{
 		this.tags = tags;
 	}
 
 	public String getLyrics()
 	{
-		return Lyrics;
+		return lyrics;
 	}
 
 	public void setLyrics(String lyrics)
 	{
-		Lyrics = lyrics;
+		this.lyrics = lyrics;
 	}
 	
 	public String getTitle()
@@ -82,10 +87,9 @@ public class Song
 		return songPath;
 	}
 
-	public Object getData()
+	public AudioData getData()
 	{
 		return data;
 	}
-	
 	
 }
