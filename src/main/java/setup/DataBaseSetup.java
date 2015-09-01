@@ -1,6 +1,6 @@
 package setup;
 
-import database.DataBaseManager;
+import database.PostgresDataBaseManager;
 import interfaces.ISetup;
 
 public class DataBaseSetup implements ISetup 
@@ -80,7 +80,7 @@ public class DataBaseSetup implements ISetup
 	
 	private void buildTable(String tableName, StringBuilder tableStructure)
 	{
-		DataBaseManager dataBaseManager = DataBaseManager.getInstance();
+		PostgresDataBaseManager dataBaseManager = PostgresDataBaseManager.getInstance();
 		
 		if(startFromScratch)
 		{
