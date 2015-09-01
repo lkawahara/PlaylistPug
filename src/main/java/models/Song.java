@@ -97,7 +97,7 @@ public class Song
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((Lyrics == null) ? 0 : Lyrics.hashCode());
+		result = prime * result + ((lyrics == null) ? 0 : lyrics.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((songName == null) ? 0 : songName.hashCode());
 		result = prime * result + ((songPath == null) ? 0 : songPath.hashCode());
@@ -129,7 +129,7 @@ public class Song
 		{
 			result = false;
 		}
-		else if(!this.Lyrics.equals(otherSong.getLyrics()))
+		else if(!this.lyrics.equals(otherSong.getLyrics()))
 		{
 			result = false;
 		}
