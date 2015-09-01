@@ -2,8 +2,7 @@ package interfaces;
 
 import java.util.List;
 
-import javax.swing.text.html.HTML.Tag;
-
+import models.GenreTag;
 import models.Song;
 
 public interface IDALpug
@@ -14,9 +13,9 @@ public interface IDALpug
 
 	Song getByTitle(String title);
 	
-	List<Song> getByTag(Tag tag);
+	List<Song> getByTag(GenreTag tag);
 	
-	List<Song> getByTags(List<Tag> tag);
+	List<Song> getByTags(List<GenreTag> tag);
 	
 	List<Song> getByLyrics(String Lyrics);
 

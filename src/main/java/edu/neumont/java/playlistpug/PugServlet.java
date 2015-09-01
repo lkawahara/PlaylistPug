@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dependencyInjector.DependencyInjector;
+import interfaces.IDALpug;
+
 /**
  * Servlet implementation class PugServlet
  */
@@ -45,7 +48,7 @@ public class PugServlet extends HttpServlet {
 				destination = "/WEB-INF/upload.jsp";
 			}else if(path[0].equals("song")){
 				//set attributes name as the name of the song and
-				//song as whatever is needed to play the song
+				//song as whatever is needed to play the songs
 				request.setAttribute("name", "song name");
 				request.setAttribute("song", "song data");
 				request.setAttribute("sid", 1);
