@@ -1,5 +1,7 @@
 package databaseTesting;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -21,29 +23,38 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 public class DatabaseTesting {
 
-	BasicDataSource basicDataSource;
-	DALpug dalpug;
-	Song testSong;
+	static BasicDataSource basicDataSource;
+	static DALpug dalpug;
+	static Song testSong;
 	
-	boolean setupCalled = false;
+	static boolean setupCalled = false;
+	static Long   id;
 	
-	private void setup()
+	@BeforeClass
+	public static void setup()
 	{
 		if(!setupCalled)
 		{
+			setupCalled = true;
 			MasterSetup.getInstance().run();
 			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 			basicDataSource = (BasicDataSource) context.getBean("dataSource");
 			dalpug = new DALpug();
 			testSong = getTestSong();
 			context.close();
+			id = dalpug.add(testSong);
 		}
 	}
 	
-	//@Test
+	@AfterClass
+	public static void takeDown()
+	{
+		dalpug.dropTable();
+	}
+	
+	@Test
 	public void connectToDatabase() 
 	{
-		setup();
 		try 
 		{
 			Connection connection = basicDataSource.getConnection();
@@ -59,10 +70,9 @@ public class DatabaseTesting {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void CreateATable() 
 	{
-		setup();
 		try 
 		{
 			Connection connection = basicDataSource.getConnection();
@@ -84,10 +94,9 @@ public class DatabaseTesting {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void CreateandDeleteATable() 
 	{
-		setup();
 		try 
 		{
 			Connection connection = basicDataSource.getConnection();
@@ -109,10 +118,9 @@ public class DatabaseTesting {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void AddingSongToDatabase()
 	{
-		setup();
 		Long id = dalpug.add(testSong);
 		
 		/**/
@@ -121,44 +129,27 @@ public class DatabaseTesting {
 			fail("Song was not added");
 		}
 		/**/
-		
-		dalpug.dropTable();
 	}
 	
-	//@Test
+	@Test
 	public void GetSongByID()
 	{
-		setup();
-		Long id = dalpug.add(testSong);
-		
 		testSongMatch(dalpug.getById(id), testSong, "The correct song was not returned: GetSongByID");
-		
-		dalpug.dropTable();
 	}
 	
-	//@Test
+	@Test
 	public void GetSongByLyrics()
-	{
-		setup();
-		Long id = dalpug.add(testSong);
-		
+	{	
 		testSongMatchList(dalpug.getByLyrics("NA"), testSong, "The correct song was not returned: GetSongByLyrics");
-		
-		dalpug.dropTable();
 	}
 	
 	@Test
 	public void GetSongByTag()
 	{
-		setup();
-		Long id = dalpug.add(testSong);
-		
 		testSongMatchList(dalpug.getByTag(GenreTag.Classical), testSong, "The correct song was not returned: GetSongByTag");
-		
-		dalpug.dropTable();
 	}
 	
-	private void testSongMatch(Song songReturned, Song testSong, String msg)
+	private static void testSongMatch(Song songReturned, Song testSong, String msg)
 	{
 		if(!testSong(songReturned, testSong))
 		{
@@ -166,7 +157,7 @@ public class DatabaseTesting {
 		}
 	}
 	
-	private void testSongMatchList(List<Song> songsReturned, Song testSong, String msg)
+	private static void testSongMatchList(List<Song> songsReturned, Song testSong, String msg)
 	{
 		boolean matchFound = false;
 		for(Song song : songsReturned)
@@ -184,13 +175,13 @@ public class DatabaseTesting {
 		}
 	}
 	
-	private boolean testSong(Song songReturned, Song testSong)
+	private static boolean testSong(Song songReturned, Song testSong)
 	{
 		return testSong.equals(songReturned);
 	}
 	
 	//Helpers
-	Song getTestSong()
+	static Song getTestSong()
 	{
 		String fileName = "LooneyToonsEnd.wav";
 		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;

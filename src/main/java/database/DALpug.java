@@ -54,6 +54,11 @@ public class DALpug implements IDALpug
 	{
 		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "ID = " + id, "", "");
 		
+		try {
+			resultSet.next();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+		}
 		Song song = deserializeSong(resultSet);
 		
 		closeResults(resultSet);
@@ -67,6 +72,12 @@ public class DALpug implements IDALpug
 		ResultSet resultSet = dataBaseManager.Pulliteam(songtableName, "", "title = " + title, "", "");
 		
 		Song song = deserializeSong(resultSet);
+		
+		try {
+			resultSet.next();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+		}
 		
 		closeResults(resultSet);
 		
