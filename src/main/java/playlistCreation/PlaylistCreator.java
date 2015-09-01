@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import models.AudioData;
 import models.GenreTag;
@@ -12,12 +14,36 @@ import models.Song;
 
 import org.junit.Assert;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 //takes in an audioDataObject
 //compares it against all the other audioDataObjects in the db
 //generates a score for each of them
 	//store song and score somewhere
 //go through song score map and pick top 25 to create the playlist
 public class PlaylistCreator {
+	
+	LoadingCache<Song, Map<Float, Song>> songScoreMapCache = CacheBuilder.newBuilder()
+		       .maximumSize(100)
+		       .expireAfterWrite(1, TimeUnit.DAYS)
+		       .build(
+		           new CacheLoader<Song, Map<Float, Song>>() {
+		             public Map<Float, Song> load(Song startingSong) throws ExecutionException {
+		               return generateSongScoreMap(startingSong);
+		             }
+		           });
+	
+	LoadingCache<Map<Float, Song>, Song []> playlistCache = CacheBuilder.newBuilder()
+		       .maximumSize(100)
+		       .expireAfterWrite(1, TimeUnit.DAYS)
+		       .build(
+		           new CacheLoader<Map<Float, Song>, Song []>() {
+		             public Song [] load(Map<Float, Song> songScoreMap) throws ExecutionException {
+		               return generatePlaylist(songScoreMap);
+		             }
+		           });
 	
 	//TODO replace with IDAL implementation
 	private class AudioDataService{
@@ -33,48 +59,49 @@ public class PlaylistCreator {
 	};
 	
 	private AudioDataService songService; 
-	private Song startingSong;
-	private Song [] playlist;
 	private static int NUM_SONGS = 5;
-	private Map<Float, Song> songScoreMap;
 	
 	//AudioData
 	public PlaylistCreator(List<Song> songs){
-//		startingSong = songData; TODO change to input song
 		songService = new AudioDataService(songs);
-		startingSong = songService.getAllSongs().get(0);
-		playlist = new Song[NUM_SONGS];
-		songScoreMap = new TreeMap<>();
-		compareAllSongs();
 	}
 	
-	//updates songScoreMap and playlist
-	private void compareAllSongs(){
-		//generates a playlist from all the songs grabbed from songService, compared to startingSong
-		//grabs NUM_SONGS
-		updateSongMap();
+	private Song[] generatePlaylist(Map<Float, Song> songScoreMap){
+		//generates a playlist from all the songs in songService, compared to startingSong
 		List<Song> allSongs = new ArrayList<Song>(songScoreMap.values());
-		
+		Song[] playlist = new Song[NUM_SONGS];
 		for(float i = 0; i < playlist.length; i+= 1){
 			playlist[(int)i] = allSongs.get((int)i);
 		}
+		return playlist;
 	}
 	
-	private void updateSongMap(){
-		songScoreMap.clear();
+	private Map<Float, Song> generateSongScoreMap(Song starting){
+		//key: compatibilityScore, value: songAudioData
+		Map<Float, Song> songScoreMap = new TreeMap<Float, Song>();
 		for(Song song : songService.getAllSongs()){
-			//key: compatibilityScore, value: songAudioData
-			float compatibilityKey = compareToStartingSong(song);
+			float compatibilityKey = compareSongs(starting, song);
 			while(songScoreMap.containsKey(compatibilityKey)){
 				compatibilityKey += 0.001f; //automatically put the next key lower in value
 			}
 			songScoreMap.put(compatibilityKey, song);
 		}
+		return songScoreMap;
 	}
 	
+	//tries to get a cached version of the song score map, else generates a new map and caches that value
+	private Map<Float, Song> getSongScoreMap(Song starting){
+		return songScoreMapCache.getUnchecked(starting);
+	}
+	
+	//tries to get a cached version of the playlist, else generates a new playlist and caches that value
 	public Song[] getPlaylist(){
-		Assert.assertNotNull(playlist);
-		return playlist;
+		Song starting = songService.getAllSongs().get(0);
+		return playlistCache.getUnchecked( getSongScoreMap(starting) );
+	}
+	
+	public Song[] getPlaylist(Song starting){
+		return playlistCache.getUnchecked( getSongScoreMap(starting) );
 	}
 	
 	int TAG_SCORE_INCR = 50;
@@ -83,26 +110,26 @@ public class PlaylistCreator {
 	int COMPATIBILITY_SCORE_CAP = Integer.MAX_VALUE;
 	//don't allow for negative numbers as compatibility scores 
 	//they will shoot that unlikely matching song to the front of the tree map
-	private int compareToStartingSong(Song toCompare){
+	private int compareSongs(Song startingSong, Song toCompare){
 		//generate a starting score
 		int compatibilityScore = STARTING_COMPATIBILITY_SCORE;
 		
 		//BPM adversely affects score
-		compatibilityScore = affectScoreBasedOnBPM(compatibilityScore, toCompare);
+		compatibilityScore = affectScoreBasedOnBPM(compatibilityScore, startingSong, toCompare);
 		
 		//matching tags adds to the score
-		compatibilityScore = affectScoreBasedOnTags(compatibilityScore, toCompare);
+		compatibilityScore = affectScoreBasedOnTags(compatibilityScore,  startingSong, toCompare);
 		
 		return compatibilityScore;
 	}
 	
 	//returns bpm difference
-	private int affectScoreBasedOnBPM(int compatibilityScore, Song toCompare){
+	private int affectScoreBasedOnBPM(int compatibilityScore, Song startingSong, Song toCompare){
 		compatibilityScore += Math.abs(toCompare.getData().getBPM() - startingSong.getData().getBPM());
 		return clamp(compatibilityScore, 0, COMPATIBILITY_SCORE_CAP);
 	}
 	
-	private int affectScoreBasedOnTags(int compatibilityScore, Song toCompare){
+	private int affectScoreBasedOnTags(int compatibilityScore, Song startingSong, Song toCompare){
 		Collection<GenreTag> toCompareTags = toCompare.getData().getTags();
 		for(GenreTag tag : startingSong.getData().getTags()){
 			//increase/decrease score based on matching/mismatching tag

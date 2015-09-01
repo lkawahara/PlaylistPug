@@ -18,7 +18,7 @@ public class PlaylistCreatorTest {
 
 	//test which only tests playlistCreator functionality
 	//uses debug constructor of AudioData to skip analyzing songs for faster test
-	@Test 
+	//@Test 
 	public void PlaylistCreatorTestTest(){
 		PlaylistCreator pc = new PlaylistCreator(getDummyBPMSongs());
 		Song[] generatedPlaylist = pc.getPlaylist();
@@ -34,7 +34,7 @@ public class PlaylistCreatorTest {
 	
 	//starting song: 170bpm 
 	//test should order songs in decrementing order due to next appropriate value 
-	@Test 
+	//@Test 
 	public void OrderPlaylistByBPM() throws IOException {
 		PlaylistCreator pc = new PlaylistCreator(getSongs());
 		Song[] generatedPlaylist = pc.getPlaylist();
@@ -61,7 +61,7 @@ public class PlaylistCreatorTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void OrderPlaylistByTag() throws IOException {
 		PlaylistCreator pc = new PlaylistCreator(getTagSongs());
 		Song[] generatedPlaylist = pc.getPlaylist();
@@ -72,6 +72,25 @@ public class PlaylistCreatorTest {
 			Assert.assertTrue(songBPM < currBPM);
 			currBPM = songBPM;
 		}
+	}
+	
+	@Test
+	public void TestCaching() {
+		PlaylistCreator pc = new PlaylistCreator(getDummyBPMSongs());
+		
+		long start = System.currentTimeMillis();
+		Song[] generatedPlaylist = pc.getPlaylist();
+		long end = System.currentTimeMillis();
+		long timeTaken = end - start;
+		
+		
+		start = System.currentTimeMillis();
+		generatedPlaylist = pc.getPlaylist();
+		end = System.currentTimeMillis();
+		long timeTakenSecondTime = end - start;
+		
+		System.out.println("first time: " + timeTaken + "; second time: " + timeTakenSecondTime);
+		Assert.assertTrue(timeTakenSecondTime < timeTaken);
 	}
 	
 	private List<Song> getDummyBPMSongs(){
