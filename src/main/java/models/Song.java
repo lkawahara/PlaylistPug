@@ -56,7 +56,7 @@ public class Song
 		this.tags = new ArrayList<GenreTag>();
 		this.lyrics = "not entered";
 	}
-	
+
 	public List<GenreTag> getTags() 
 	{
 		return tags;
@@ -92,4 +92,48 @@ public class Song
 		return data;
 	}
 	
+	@Override
+	public int hashCode() 
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((Lyrics == null) ? 0 : Lyrics.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((songName == null) ? 0 : songName.hashCode());
+		result = prime * result + ((songPath == null) ? 0 : songPath.hashCode());
+		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		Song otherSong = (Song) obj;
+		boolean result = true;
+		
+		if(!this.songPath.equals(otherSong.getSongPath()))
+		{
+			result = false;
+		}
+		/*
+		else if(!this.data.equals(otherSong.getData()))
+		{
+			result = false;
+		}
+		*/
+		else if(!this.songName.equals(otherSong.getTitle()))
+		{
+			result = false;
+		}
+		else if(!this.tags.equals(otherSong.getTags()))
+		{
+			result = false;
+		}
+		else if(!this.Lyrics.equals(otherSong.getLyrics()))
+		{
+			result = false;
+		}
+		
+		return result;
+	}
 }

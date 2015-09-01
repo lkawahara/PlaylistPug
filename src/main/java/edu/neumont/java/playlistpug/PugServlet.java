@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dependencyInjector.DependencyInjector;
+import interfaces.IDALpug;
+
 /**
  * Servlet implementation class PugServlet
  */
@@ -30,6 +33,8 @@ public class PugServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		IDALpug dallPug = (IDALpug) DependencyInjector.getInstance().get("IDALpug");
+		
 		String destination = request.getPathInfo();
 		String[] path = null;
 		String error = "You done goofed.";

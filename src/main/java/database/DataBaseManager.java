@@ -1,7 +1,6 @@
 package database;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -143,7 +142,7 @@ public class DataBaseManager
 		if(connactionManagment != null)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append("DROP TABLE IF NOT EXISTS");
+			stringBuilder.append("DROP TABLE IF EXISTS ");
 			stringBuilder.append(tableName);
 			successful = connactionManagment.execute(stringBuilder.toString());
 		}
@@ -160,7 +159,7 @@ public class DataBaseManager
 	 * @param OrderBy
 	 * @return
 	 */
-	public ResultSet Pulliteam(String tableName, String whatToPull, String where, String OrderBy)
+	public ResultSet Pulliteam(String tableName, String whatToPull, String where, String regex, String OrderBy)
 	{
 		ConnactionManagment connactionManagment = getConnactionManagment();
 		ResultSet result = null;
@@ -181,7 +180,7 @@ public class DataBaseManager
 			
 			stringBuilder.append("FROM ");
 			
-			stringBuilder.append(tableName);
+			stringBuilder.append(tableName + " ");
 			
 			if(!"".equals(where))
 			{
@@ -189,15 +188,39 @@ public class DataBaseManager
 				stringBuilder.append(where);
 			}
 			
-			if(!"".equals(OrderBy) || OrderBy != null)
+			if(!"".equals(regex))
+			{
+				stringBuilder.append(regex);
+			}
+			
+			if(!"".equals(OrderBy))
 			{
 				stringBuilder.append(OrderBy);
 			}
+			
+			stringBuilder.append(";");
 			result = connactionManagment.executeQuery(stringBuilder.toString());
 		}
 		
-		closeConnactionManagment(connactionManagment);
+		//testing(result);
+		//closeConnactionManagment(connactionManagment);
+		//testing(result);
 		return result;
+	}
+	
+	private void testing(ResultSet result)
+	{
+		try 
+		{
+			while(result.next())
+			{
+				 System.out.println("GOT ONE!!");
+			}
+		} 
+		catch (SQLException e)
+		{
+			logger.error(e.getMessage());
+		}
 	}
 	
 	/**

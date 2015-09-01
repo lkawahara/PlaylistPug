@@ -38,8 +38,8 @@ public class MasterSetup implements ISetup {
 	
 	private void setup()
 	{
-		//DependencyInjectorSetup.getInstance().run();
-		//DataBaseSetup.getInstance().run();
+		DependencyInjectorSetup.getInstance().run();
+		DataBaseSetup.getInstance().run();
 	}
 
 }
