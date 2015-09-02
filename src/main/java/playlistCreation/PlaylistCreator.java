@@ -25,23 +25,23 @@ import com.google.common.cache.LoadingCache;
 //go through song score map and pick top 25 to create the playlist
 public class PlaylistCreator {
 	
-	LoadingCache<Song, Map<Float, Song>> songScoreMapCache = CacheBuilder.newBuilder()
+	LoadingCache<Song, Map<Integer, Song>> songScoreMapCache = CacheBuilder.newBuilder()
 		       .maximumSize(100)
 		       .expireAfterWrite(1, TimeUnit.DAYS)
 		       .build(
-		           new CacheLoader<Song, Map<Float, Song>>() {
-		             public Map<Float, Song> load(Song startingSong) throws ExecutionException {
+		           new CacheLoader<Song, Map<Integer, Song>>() {
+		             public Map<Integer, Song> load(Song startingSong) throws ExecutionException {
 		               return generateSongScoreMap(startingSong);
 		             }
 		           });
 	
-	LoadingCache<Map<Float, Song>, Song []> playlistCache = CacheBuilder.newBuilder()
+	LoadingCache<Song, Song []> playlistCache = CacheBuilder.newBuilder()
 		       .maximumSize(100)
 		       .expireAfterWrite(1, TimeUnit.DAYS)
 		       .build(
-		           new CacheLoader<Map<Float, Song>, Song []>() {
-		             public Song [] load(Map<Float, Song> songScoreMap) throws ExecutionException {
-		               return generatePlaylist(songScoreMap);
+		           new CacheLoader<Song, Song []>() {
+		             public Song [] load(Song starting) throws ExecutionException {
+		               return generatePlaylist(getSongScoreMap(starting));
 		             }
 		           });
 	
@@ -66,7 +66,7 @@ public class PlaylistCreator {
 		songService = new AudioDataService(songs);
 	}
 	
-	private Song[] generatePlaylist(Map<Float, Song> songScoreMap){
+	private Song[] generatePlaylist(Map<Integer, Song> songScoreMap){
 		//generates a playlist from all the songs in songService, compared to startingSong
 		List<Song> allSongs = new ArrayList<Song>(songScoreMap.values());
 		Song[] playlist = new Song[NUM_SONGS];
@@ -76,37 +76,40 @@ public class PlaylistCreator {
 		return playlist;
 	}
 	
-	private Map<Float, Song> generateSongScoreMap(Song starting){
+	private Map<Integer, Song> generateSongScoreMap(Song starting){
 		//key: compatibilityScore, value: songAudioData
-		Map<Float, Song> songScoreMap = new TreeMap<Float, Song>();
+		Map<Integer, Song> songScoreMap = new TreeMap<Integer, Song>();
 		for(Song song : songService.getAllSongs()){
-			float compatibilityKey = compareSongs(starting, song);
-			while(songScoreMap.containsKey(compatibilityKey)){
-				compatibilityKey += 0.001f; //automatically put the next key lower in value
+			if(!song.getTitle().equals(starting.getTitle())){
+				int compatibilityKey = compareSongs(starting, song);
+				while(songScoreMap.containsKey(compatibilityKey)){
+					compatibilityKey += 1; //automatically put the next key lower in value
+				}
+				songScoreMap.put(compatibilityKey, song);
 			}
-			songScoreMap.put(compatibilityKey, song);
 		}
+		songScoreMap.put(-1000, starting);
 		return songScoreMap;
 	}
 	
 	//tries to get a cached version of the song score map, else generates a new map and caches that value
-	private Map<Float, Song> getSongScoreMap(Song starting){
+	private Map<Integer, Song> getSongScoreMap(Song starting){
 		return songScoreMapCache.getUnchecked(starting);
 	}
 	
 	//tries to get a cached version of the playlist, else generates a new playlist and caches that value
 	public Song[] getPlaylist(){
 		Song starting = songService.getAllSongs().get(0);
-		return playlistCache.getUnchecked( getSongScoreMap(starting) );
+		return playlistCache.getUnchecked( starting );
 	}
 	
 	public Song[] getPlaylist(Song starting){
-		return playlistCache.getUnchecked( getSongScoreMap(starting) );
+		return playlistCache.getUnchecked( starting );
 	}
 	
 	int TAG_SCORE_INCR = 50;
 	int TAG_MISMATCH_SCORE_DECR = 20;
-	int STARTING_COMPATIBILITY_SCORE = Integer.MAX_VALUE;//for tree map purposes
+	int STARTING_COMPATIBILITY_SCORE = Integer.MAX_VALUE / 2;//for tree map purposes
 	int COMPATIBILITY_SCORE_CAP = Integer.MAX_VALUE;
 	//don't allow for negative numbers as compatibility scores 
 	//they will shoot that unlikely matching song to the front of the tree map

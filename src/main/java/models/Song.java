@@ -49,6 +49,14 @@ public class Song
 		this.songName = songName;
 	}
 	
+	public Song(String songName, AudioData data){
+		this.data = data;
+		this.songName = songName;//String.valueOf(data.getBPM());
+		this.songPath = null;
+		this.tags = new ArrayList<GenreTag>();
+		this.lyrics = "not entered";
+	}
+
 	public Song(AudioData data){
 		this.data = data;
 		this.songName = String.valueOf(data.getBPM());
@@ -56,7 +64,7 @@ public class Song
 		this.tags = new ArrayList<GenreTag>();
 		this.lyrics = "not entered";
 	}
-
+	
 	public List<GenreTag> getTags() 
 	{
 		return tags;
