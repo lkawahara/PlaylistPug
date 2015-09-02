@@ -7,7 +7,6 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<spring.version>4.1.4.RELEASE</spring.version>
 		<jettyVersion>8.1.16.v20140903</jettyVersion>
 		<exec.mainClass>main.Main</exec.mainClass>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,22 +65,6 @@
 
 
 		<!-- Business Layer -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
