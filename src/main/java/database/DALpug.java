@@ -15,7 +15,7 @@ import models.Song;
 
 public class DALpug implements IDALpug 
 {
-	DataBaseManager dataBaseManager;
+	PostgresDataBaseManager dataBaseManager;
 	
 	 private static final Logger logger = 
 			    LoggerFactory.getLogger(DALpug.class);
@@ -31,7 +31,7 @@ public class DALpug implements IDALpug
 	
 	public DALpug()
 	{
-		dataBaseManager = DataBaseManager.getInstance();
+		dataBaseManager = PostgresDataBaseManager.getInstance();
 	}
 	
 	@Override

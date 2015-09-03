@@ -13,16 +13,16 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import edu.neumont.spring.config.MainConfig;
 
-public class DataBaseManager 
+public class PostgresDataBaseManager 
 {
 	 private static final Logger logger = 
-			    LoggerFactory.getLogger(DataBaseManager.class);
+			    LoggerFactory.getLogger(PostgresDataBaseManager.class);
 	
 	BasicDataSource basicDataSource;
 	
-	static DataBaseManager instance = new DataBaseManager();
+	static PostgresDataBaseManager instance = new PostgresDataBaseManager();
 
-	public static DataBaseManager getInstance()
+	public static PostgresDataBaseManager getInstance()
 	{
 		return instance;
 	}
@@ -95,7 +95,7 @@ public class DataBaseManager
 		}
 	}
 	
-	private DataBaseManager()
+	private PostgresDataBaseManager()
 	{
 		 //This is bad but you must replace it
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
