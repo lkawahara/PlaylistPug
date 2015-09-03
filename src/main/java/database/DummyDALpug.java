@@ -16,7 +16,7 @@ public class DummyDALpug implements IDALpug
 	{
 		if(dummySong == null)
 		{
-			String fileName = "LooneyToonsEnd.wav";
+			String fileName = "LooneyToonsEnd.mp3";
 			String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
 			dummySong = new Song("LooneyToons", null, path);
 			dummySongCollection = new ArrayList<Song>();
