@@ -1,7 +1,5 @@
 language: java
-script: mvn clean package heroku:deploy-war
-env:
-  global: a5ff1417-900e-4abe-a4f8-55055e6f9645
+script: mvn gem:exec -DherokuApiKey="a5ff1417-900e-4abe-a4f8-55055e6f9645"
 notifications:
   email:
     recipients:
