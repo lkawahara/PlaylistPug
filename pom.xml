@@ -216,7 +216,25 @@
 		  <version>2.6</version>
 		  <type>maven-plugin</type>
 		</dependency>
+		<dependency>
+		  <groupId>rubygems</groupId>
+		  <artifactId>travis</artifactId>
+		  <version>1.8.0</version>
+		  <type>gem</type>
+		</dependency>
+		<dependency>
+		  <groupId>rubygems</groupId>
+		  <artifactId>pry</artifactId>
+		  <version>0.10.1</version>
+		  <type>gem</type>
+		</dependency>
 	</dependencies>
+	<pluginRepositories>
+		<pluginRepository>
+		  <id>rubygems-releases</id>
+		  <url>http://rubygems-proxy.torquebox.org/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -245,8 +263,7 @@
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jettyVersion}</version>
-			</plugin>
-			
+			</plugin>			
 			<plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-dependency-plugin</artifactId>
@@ -269,5 +286,17 @@
 	            </executions>
         	</plugin>
 		</plugins>
+		<plugin>
+          <groupId>de.saumya.mojo</groupId>
+          <artifactId>gem-maven-plugin</artifactId>
+          <version>1.0.10</version>
+          <configuration>
+            <execArgLines>
+              <execArgLine>${project.build.directory}/rubygems/bin/travis</execArgLine>
+              <execArgLine>encrypt</execArgLine>
+              <execArgLine>HEROKU_API_KEY=${herokuApiKey}</execArgLine>
+            </execArgLines>
+          </configuration>
+        </plugin>
 	</build>
 </project>

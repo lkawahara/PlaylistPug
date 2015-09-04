@@ -3,7 +3,7 @@ package edu.neumont.spring.config;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import setup.MasterSetup;
+//import setup.MasterSetup;
 
 public class MyWebApplicationInitializer extends
 		AbstractAnnotationConfigDispatcherServletInitializer implements WebApplicationInitializer
@@ -12,7 +12,7 @@ public class MyWebApplicationInitializer extends
 	public MyWebApplicationInitializer()
 	{
 		//System.out.print("Killroy was here.");
-		MasterSetup.getInstance().run();
+//		MasterSetup.getInstance().run();
 	}
 	
 	@Override
