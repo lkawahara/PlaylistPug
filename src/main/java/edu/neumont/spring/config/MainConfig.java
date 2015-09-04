@@ -74,19 +74,7 @@ public class MainConfig
         
         ConnectionInfoProperties = new DBConnectionProperties(username, password, dbUrl, config, basicDataSource);
 	}
-	
-	private void driverSetup()
-	{
-		try 
-    	{
-    		Class.forName("org.postgresql.Driver");
-		}
-    	catch (ClassNotFoundException e)
-    	{
-			System.out.println("Failed to load driver: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
+
 	
 	private void Setup() throws URISyntaxException
 	{
@@ -102,7 +90,6 @@ public class MainConfig
     public BasicDataSource dataSource() throws URISyntaxException 
     {
     	Setup();
-        
         return ConnectionInfoProperties.basicDataSource;
     }
     
@@ -118,5 +105,18 @@ public class MainConfig
          
          return connection; 
     }
+    
+	private void driverSetup()
+	{
+		try 
+    	{
+    		Class.forName("org.postgresql.Driver");
+		}
+    	catch (ClassNotFoundException e)
+    	{
+			System.out.println("Failed to load driver: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
     
 }
