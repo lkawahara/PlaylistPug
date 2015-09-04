@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import edu.neumont.spring.config.MainConfig;
+import interfaces.IDataBaseManager;
 
 public class PostgresDataBaseManager 
 {
@@ -97,10 +98,8 @@ public class PostgresDataBaseManager
 	
 	private PostgresDataBaseManager()
 	{
-		 //This is bad but you must replace it
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 		this.basicDataSource = (BasicDataSource) context.getBean("dataSource");
-		 //String test = "This was a triumph";
 		context.close();
 	}
 	
@@ -270,7 +269,7 @@ public class PostgresDataBaseManager
 	 * Sets up a ConnactionManagment
 	 * @return
 	 */
-	public ConnactionManagment getConnactionManagment()
+	private ConnactionManagment getConnactionManagment()
 	{
 		ConnactionManagment connactionManagment = null;
 		try 
@@ -290,7 +289,7 @@ public class PostgresDataBaseManager
 	 * Closes the ConnactionManagment
 	 * @param connactionManagment
 	 */
-	public void closeConnactionManagment(ConnactionManagment connactionManagment)
+	private void closeConnactionManagment(ConnactionManagment connactionManagment)
 	{
 		try 
 		{
