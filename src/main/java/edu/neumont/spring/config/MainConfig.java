@@ -23,6 +23,40 @@ public class MainConfig
 	
 	private static DBConnectionProperties ConnectionInfoProperties;
 	
+    @Bean(name="dataSource")
+    public BasicDataSource dataSource() throws URISyntaxException 
+    {
+    	Setup();
+        return ConnectionInfoProperties.basicDataSource;
+    }
+    
+    @Bean(name="ConnectionToDataBase")
+    public Connection getConnection() throws SQLException, URISyntaxException
+    {
+    	Setup();
+    	
+ 		Connection connection = DriverManager.getConnection(
+ 				ConnectionInfoProperties.dbUrl,
+ 				ConnectionInfoProperties.config
+ 				);
+         
+         return connection; 
+    }
+
+	//Helpers
+	private void driverSetup()
+	{
+		try 
+    	{
+    		Class.forName("org.postgresql.Driver");
+		}
+    	catch (ClassNotFoundException e)
+    	{
+			System.out.println("Failed to load driver: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	private class DBConnectionProperties
 	{
 		String username;
@@ -50,6 +84,16 @@ public class MainConfig
         }
 	}
 	
+	private void Setup() throws URISyntaxException
+	{
+		driverSetup();
+        
+        if(ConnectionInfoProperties == null)
+        {
+        	setDBConnectionProperties();
+        }
+	}
+	
 	private void setDBConnectionProperties() throws URISyntaxException
 	{
 		URI dbUri = new URI(DATABASE_URL);
@@ -73,50 +117,6 @@ public class MainConfig
         basicDataSource.setPassword(password);
         
         ConnectionInfoProperties = new DBConnectionProperties(username, password, dbUrl, config, basicDataSource);
-	}
-
-	
-	private void Setup() throws URISyntaxException
-	{
-		driverSetup();
-        
-        if(ConnectionInfoProperties == null)
-        {
-        	setDBConnectionProperties();
-        }
-	}
-	
-    @Bean(name="dataSource")
-    public BasicDataSource dataSource() throws URISyntaxException 
-    {
-    	Setup();
-        return ConnectionInfoProperties.basicDataSource;
-    }
-    
-    @Bean(name="ConnectionToDataBase")
-    public Connection getConnection() throws SQLException, URISyntaxException
-    {
-    	Setup();
-    	
- 		Connection connection = DriverManager.getConnection(
- 				ConnectionInfoProperties.dbUrl,
- 				ConnectionInfoProperties.config
- 				);
-         
-         return connection; 
-    }
-    
-	private void driverSetup()
-	{
-		try 
-    	{
-    		Class.forName("org.postgresql.Driver");
-		}
-    	catch (ClassNotFoundException e)
-    	{
-			System.out.println("Failed to load driver: " + e.getMessage());
-			e.printStackTrace();
-		}
 	}
     
 }
