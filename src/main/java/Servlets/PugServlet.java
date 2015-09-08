@@ -95,7 +95,7 @@ extends HttpServlet {
                     ArrayList<GenreTag> tags = new ArrayList<GenreTag>();
                     GenreTag g = this.getTag(request.getParameter("genre"));
                     tags.add(g);
-                    database.add(new Song(fileName, "", "/resources/" + fileName, request.getParameter("lyrics")));
+                    database.add(new Song(fileName, new AudioData(new FileInputStream(uploadedFile)), "/resources/" + fileName, request.getParameter("lyrics")));
                 }
             }
             catch (FileUploadException ex) {
