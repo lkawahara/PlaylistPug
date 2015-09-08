@@ -1,4 +1,4 @@
-package edu.neumont.java.playlistpug;
+package Servlets;
 
 import dependencyInjector.DependencyInjector;
 import interfaces.IDALpug;
@@ -95,7 +95,7 @@ extends HttpServlet {
                     ArrayList<GenreTag> tags = new ArrayList<GenreTag>();
                     GenreTag g = this.getTag(request.getParameter("genre"));
                     tags.add(g);
-                    database.add(new Song(fileName, (Object)"", "/resources/" + fileName, request.getParameter("lyrics")));
+                    database.add(new Song(fileName, "", "/resources/" + fileName, request.getParameter("lyrics")));
                 }
             }
             catch (FileUploadException ex) {
@@ -104,7 +104,7 @@ extends HttpServlet {
             }
             catch (Exception ex) {
                 redirect = "/pugs/error";
-                this.error = "File Saving Error";
+                this.error = "Error Saving File";
             }
         } else if (path[0].equals("nextSong") && path.length == 2) {
             redirect = "/pugs/song/1";
