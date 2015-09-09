@@ -111,11 +111,18 @@ extends HttpServlet {
         } else if (path[0].equals("nextSong") && path.length == 2) {
             redirect = "/pugs/song/1";
         } else if (path[0].equals("search") && path.length == 1) {
-            List<Song> songs = database.getByLyrics("searchFor");
-            this.searchList.add(database.getByTitle("searchFor"));
-            for (Song s : songs) {
-                this.searchList.add(s);
-            }
+		List<Song> songs;
+	    try{
+		songs = database.getByLyrics(request.getParameter("searchFor"));
+            	this.searchList.add(database.getByTitle(request.getParameter("searchFor")));
+            	for (Song s : songs) {
+                	this.searchList.add(s);
+            	}
+            	
+	}
+	catch(NullPointerException e){
+		songs = new ArrayList<Song>();
+	}
             this.getResults();
             redirect = "/pugs/search";
         }
