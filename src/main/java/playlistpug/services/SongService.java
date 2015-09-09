@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import playlistpug.db.DALpug;
+import playlistpug.models.AudioData;
 import playlistpug.models.Song;
 
 public class SongService {
@@ -15,6 +16,9 @@ public class SongService {
 	
 	public void setDalPug(DALpug dalPug){
 		this.dalPug = dalPug;
+		if(dalPug.getItems().isEmpty()){
+			addSongs();
+		}
 	}
 	
 	public Long create(Song newSong) {
@@ -47,5 +51,11 @@ public class SongService {
 	public Collection<Song> getItems() {
 		return dalPug.getItems();
 	}
-
+	
+	public void addSongs(){
+		create(new Song("song1", new AudioData(100), "songpath1"));
+		create(new Song("song2", new AudioData(75), "songpath2"));
+		create(new Song("song3", new AudioData(50), "songpath3"));
+		create(new Song("song4", new AudioData(25), "songpath4"));
+	}
 }

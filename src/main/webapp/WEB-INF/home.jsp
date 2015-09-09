@@ -10,11 +10,12 @@
 		<h1>Welcome to PugPlaylist!</h1>
 	</div>
 	<div id="navBar">
-		<a href="/newpug">Home</a>
+		<a href="/home">Home</a>
 	</div>
 	<img src="http://i.imgur.com/PugI0QN.jpg" />
 	<p>Index</p>
 	<ul class="songs">
+		songs
 		<c:forEach var="song" items="${allSongs}">
 			<div class="song" onClick="selectSong()">
 				<h2 class="title">${ model.getTitle() }</h2>
