@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- put your bean definitions here -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context
+   	   http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- the application context definition for the springapp DispatcherServlet -->
+	<context:component-scan base-package="models" />
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/WEB-INF/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- Session Factory -->
+	<bean id="localSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="packagesToScan">
+			<list>
+				<value>models</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.connection.driver_class">org.postgresql.Driver</prop>
+				<prop key="hibernate.connection.url">jdbc:postgresql://ec2-54-163-228-0.compute-1.amazonaws.com:5432/d9tiku6olid4s7?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory</prop>
+        		<prop key="hibernate.connection.username">maphiawdhrurgw</prop>
+        		<prop key="hibernate.connection.password">PL4ApC1CK2qpN0XxBCfNJwehBU</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Data Access Layer -->
+	<bean id="songDAO" class="database.UserDAO">
+		<property name="sessionFactory" ref="localSessionFactory"></property>
+	</bean>
+
+	<!-- Services -->
+	<bean id="songService" class="services.SongService">
+		<!--<property name="dao" ref="userDAO"></property> -->
+	</bean>
+	
+	<!-- Controllers -->
+	<bean id="songController" class="controllers.SongController">
+	</bean>
+	
+</beans>
