@@ -14,20 +14,26 @@ import playlistpug.models.PlaylistCreator;
 
 @Controller
 public class HomeController {
-	private PlaylistCreator pc;
+
+	public HomeController(){}
+	@Autowired
+	private PlaylistCreator playlistCreator;
+	public void setPlaylistCreator(PlaylistCreator playlistCreator){
+		this.playlistCreator = playlistCreator;
+	}
 
 	//to test song partial (WILL REMOVE LATER)
     @RequestMapping("/song")
     public ModelAndView getSong(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	return new ModelAndView("song", "model", pc.getPlaylist()[0]);
+    	return new ModelAndView("song", "model", playlistCreator.getPlaylist()[0]);
     }
 	
 	//test to show all multiple songs
     @RequestMapping("/home")
     public ModelAndView getHome(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        return new ModelAndView("home", "allSongs", pc.getSongs());
+        return new ModelAndView("home", "allSongs", playlistCreator.getSongs());
     }
     
     //user makes request to star

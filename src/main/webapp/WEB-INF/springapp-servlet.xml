@@ -26,6 +26,7 @@
 				<value>playlistpug.db</value>
 				<value>playlistpug.models</value>
 				<value>playlistpug.services</value>
+				<value>playlistpug.controllers</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -46,6 +47,9 @@
 	</bean>
 	<bean id="playlistCreator" class="playlistpug.models.PlaylistCreator">
 		<property name="songService" ref="songService"></property>
+	</bean>
+	<bean id="homeController" class="playlistpug.controllers.HomeController">
+		<property name="playlistCreator" ref="playlistCreator"></property>
 	</bean>
 
 </beans>
