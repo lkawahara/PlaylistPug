@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.GenreTag;
 import models.Song;
+import models.AudioData;
+import java.io.FileInputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -85,8 +87,8 @@ extends HttpServlet {
             ServletFileUpload upload = new ServletFileUpload((FileItemFactory)factory);
             String uploadFolder = String.valueOf(this.getServletContext().getRealPath("")) + "resources";
             try {
-                List items = upload.parseRequest(request);
-                for (FileItem item : (FileItem)items) {
+                List<FileItem> items = upload.parseRequest(request);
+                for (FileItem item : items) {
                     if (item.isFormField()) continue;
                     String fileName = new File(item.getName()).getName();
                     String filePath = String.valueOf(uploadFolder) + File.separator + fileName;
