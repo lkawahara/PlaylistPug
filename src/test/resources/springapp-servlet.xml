@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- put your bean definitions here -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- the application context definition for the springapp DispatcherServlet -->
+	<context:component-scan base-package="playlistpug.controllers" />
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/WEB-INF/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<bean id="localSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="packagesToScan">
+			<list>
+				<value>playlistpug.db</value>
+				<value>playlistpug.models</value>
+				<value>playlistpug.services</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.connection.driver_class">org.postgresql.Driver</prop>
+				<prop key="hibernate.connection.url">jdbc:postgresql://ec2-54-163-228-0.compute-1.amazonaws.com:5432/d9tiku6olid4s7?user=maphiawdhrurgw&amp;password=PL4ApC1CK2qpN0XxBCfNJwehBU&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
+				</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="dalpug" class="playlistpug.db.DALpug">
+		<property name="sessionFactory" ref="localSessionFactory"></property>
+	</bean>
+	<bean id="songService" class="playlistpug.services.SongService">
+		<property name="dalPug" ref="dalpug"></property>
+	</bean>
+	<bean id="playlistCreator" class="playlistpug.models.PlaylistCreator">
+		<property name="songService" ref="songService"></property>
+	</bean>
+
+	<bean id="appTest" class="tests.AppTest">
+   		<property name="playlistCreator" ref="playlistCreator"></property>
+	</bean>
+</beans>

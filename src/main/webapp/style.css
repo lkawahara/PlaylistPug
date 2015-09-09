@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+body{background-color:#EECFA1;}
+#image{width:50%; float:left;}
+#frontPage{float: right; text-align: left; width:45%; padding:10px;}
+#content{width:80%;margin-left:auto;margin-right:auto;margin-top:20px;
+text-align:center;background-color:white;padding-top:20px;padding-bottom:20px;
+border:3px solid black;overflow:hidden}
+#header{text-align:center;}
+#navBar{margin-left:auto;margin-right:auto;width:400px;text-align:center;}
+#navLink{padding-left:5px;padding-right:5px;}
+#nextSong{width:100px;margin:auto;}
+audio{margin-left:auto; width:300px;}
+#row1{float:left; width:33%}
+#row2{display:inline-block; width:33%}
+#row3{float:right; width:33%}
+#search{margin:auto;}
