@@ -1,4 +1,4 @@
-package edu.neumont.java.playlistpug;
+package servlets;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ImageServlet
  */
-@WebServlet("/image/*")
+//@WebServlet("/image/*")
 public class ImageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

@@ -1,13 +1,14 @@
-package Servlets;
+package servlets;
 
-import dependencyInjector.DependencyInjector;
 import interfaces.IDALpug;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -15,13 +16,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import models.AudioData;
 import models.GenreTag;
 import models.Song;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import dependencyInjector.DependencyInjector;
 
 @WebServlet(value={"/pugs/*"})
 public class PugServlet
@@ -85,7 +91,7 @@ extends HttpServlet {
             ServletFileUpload upload = new ServletFileUpload((FileItemFactory)factory);
             String uploadFolder = String.valueOf(this.getServletContext().getRealPath("")) + "resources";
             try {
-                List items = upload.parseRequest(request);
+                List<FileItem> items = upload.parseRequest(request);
                 for (FileItem item : items) {
                     if (item.isFormField()) continue;
                     String fileName = new File(item.getName()).getName();
@@ -95,7 +101,7 @@ extends HttpServlet {
                     ArrayList<GenreTag> tags = new ArrayList<GenreTag>();
                     GenreTag g = this.getTag(request.getParameter("genre"));
                     tags.add(g);
-                    database.add(new Song(fileName, "", "/resources/" + fileName, request.getParameter("lyrics")));
+                    database.add(new Song(fileName, new AudioData(new FileInputStream((File)item)), "/resources/" + fileName, tags, request.getParameter("lyrics")));
                 }
             }
             catch (FileUploadException ex) {
@@ -109,7 +115,7 @@ extends HttpServlet {
         } else if (path[0].equals("nextSong") && path.length == 2) {
             redirect = "/pugs/song/1";
         } else if (path[0].equals("search") && path.length == 1) {
-            List songs = database.getByLyrics("searchFor");
+            List<Song> songs = database.getByLyrics("searchFor");
             this.searchList.add(database.getByTitle("searchFor"));
             for (Song s : songs) {
                 this.searchList.add(s);
