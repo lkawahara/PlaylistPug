@@ -13,8 +13,9 @@
 		<a href="/allSongs">Home</a>
 		<a href="/playlist">Playlist</a>
 	</div>
-	<audio id="player" src="tempFiles/110BPM.mp3" type="audio/mpeg"/>
-	
+	<audio controls>
+		<source id="player" src="tempFiles/110BPM.mp3" type="audio/mpeg">
+	</audio>
 	<button onClick="pauseVid()">pause</button>
 	<button onClick="playVid()">play</button>
 	<button>play</button>
