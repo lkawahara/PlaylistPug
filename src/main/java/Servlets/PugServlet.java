@@ -86,7 +86,7 @@ extends HttpServlet {
             String uploadFolder = String.valueOf(this.getServletContext().getRealPath("")) + "resources";
             try {
                 List items = upload.parseRequest(request);
-                for (FileItem item : items) {
+                for (FileItem item : (FileItem)items) {
                     if (item.isFormField()) continue;
                     String fileName = new File(item.getName()).getName();
                     String filePath = String.valueOf(uploadFolder) + File.separator + fileName;
