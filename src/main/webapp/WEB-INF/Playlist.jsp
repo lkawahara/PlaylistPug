@@ -3,21 +3,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Home</title>
+<title>Playlist</title>
 </head>
 <body>
 	<div id="header">
-		<h1>Welcome to PugPlaylist!</h1>
+		<h1>Here is your playlist!</h1>
 	</div>
 	<div id="navBar">
-		<a href="/home">Home</a>
+		<a href="/allSongs">Home</a>
+		<a href="/playlist">Playlist</a>
 	</div>
-	<img src="http://i.imgur.com/PugI0QN.jpg" />
-	<p>Index</p>
+	<audio id="player" src="tempFiles/110BPM.mp3" type="audio/mpeg"/>
+	
+	<button onClick="pauseVid()">pause</button>
+	<button onClick="playVid()">play</button>
+	<button>play</button>
+	
 	<ul class="songs">
 		songs
 		<c:forEach var="song" items="${allSongs}">
-			<div class="song" onClick="selectSong()">
+			<li onClick="selectSong()">
 				<h2 class="title">${ model.getTitle() }</h2>
 				<div>
 					Tags:
@@ -27,8 +32,19 @@
 						</c:forEach>
 					</ul>
 				</div>
-			</div>
+			</li>
 		</c:forEach>
 	</ul>
 </body>
+<script>
+var player = document.getElementById("player"); 
+
+function playVid() { 
+	player.play(); 
+} 
+
+function pauseVid() { 
+	player.pause(); 
+}
+</script>
 </html>

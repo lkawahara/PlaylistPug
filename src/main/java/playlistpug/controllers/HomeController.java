@@ -29,14 +29,20 @@ public class HomeController {
     @RequestMapping("/song")
     public ModelAndView getSong(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	playlistCreator.getSongs();
+    	
     	return new ModelAndView("song", "model", new Song("songname", new AudioData(120), "/songpath", "lyrics"));
     }
 	
 	//test to show all multiple songs
-    @RequestMapping("/home")
+    @RequestMapping("/allSongs")
     public ModelAndView getHome(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        return new ModelAndView("home", "allSongs", playlistCreator.getSongs());
+        return new ModelAndView("allSongs", "allSongs", new Song[]{ new Song("song name", new AudioData(150)), 
+        												new Song("song name", new AudioData(100)), 
+        												new Song("song name", new AudioData(50)), 
+        												new Song("song name", new AudioData(1)), 
+    												});
     }
     
     //user makes request to star
@@ -44,6 +50,6 @@ public class HomeController {
     public ModelAndView getPlaylist(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	long songid = Long.parseLong(request.getParameter(""));
-        return new ModelAndView("playlist");
+        return new ModelAndView("allSongs");
     }
 }

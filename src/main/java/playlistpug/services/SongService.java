@@ -15,10 +15,10 @@ public class SongService {
 	public SongService(){}
 	
 	public void setDalPug(DALpug dalPug){
-		this.dalPug = dalPug;
-		if(dalPug.getItems().isEmpty()){
-			addSongs();
-		}
+//		this.dalPug = dalPug;
+//		if(dalPug.getItems().isEmpty()){
+//			addSongs();
+//		}
 	}
 	
 	public Long create(Song newSong) {
