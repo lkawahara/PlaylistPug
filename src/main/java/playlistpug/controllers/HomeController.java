@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import playlistpug.models.AudioData;
 import playlistpug.models.PlaylistCreator;
+import playlistpug.models.Song;
 
 @Controller
 public class HomeController {
@@ -27,7 +29,7 @@ public class HomeController {
     @RequestMapping("/song")
     public ModelAndView getSong(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	return new ModelAndView("song", "model", playlistCreator.getPlaylist()[0]);
+    	return new ModelAndView("song", "model", new Song("songname", new AudioData(120), "/songpath", "lyrics"));
     }
 	
 	//test to show all multiple songs
