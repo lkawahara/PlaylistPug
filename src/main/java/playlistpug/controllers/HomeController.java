@@ -49,7 +49,11 @@ public class HomeController {
     @RequestMapping("/playlist")
     public ModelAndView getPlaylist(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	long songid = Long.parseLong(request.getParameter(""));
-        return new ModelAndView("allSongs");
+//    	long songid = Long.parseLong(request.getParameter(""));
+        return new ModelAndView("allSongs", "allSongs", new Song[]{ new Song("song name", new AudioData(150)), 
+				new Song("song name", new AudioData(100)), 
+				new Song("song name", new AudioData(50)), 
+				new Song("song name", new AudioData(1)), 
+			});
     }
 }

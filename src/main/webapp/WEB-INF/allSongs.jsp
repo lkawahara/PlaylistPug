@@ -14,16 +14,15 @@
 		<a href="/playlist">Playlist</a>
 	</div>
 	<img src="http://i.imgur.com/PugI0QN.jpg" />
-	<p>Index</p>
 	<ul class="songs">
-		songs
+		All Songs:
 		<c:forEach var="song" items="${allSongs}">
 			<div class="song" onClick="selectSong()">
-				<h2 class="title">${ model.getTitle() }</h2>
+				<h2 class="title" value="${ song.getTitle() }"></h2>
 				<div>
 					Tags:
 					<ul class="genres">
-						<c:forEach var="tag" items="${model.getTags()}">
+						<c:forEach var="tag" items="${song.getTags()}">
 							<li>${tag}</li>
 						</c:forEach>
 					</ul>
