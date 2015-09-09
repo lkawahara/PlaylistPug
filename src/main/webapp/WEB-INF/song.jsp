@@ -3,23 +3,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/song/style">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>${name}</title>
 </head>
 <body>
-<nav>
-<a href="/pugs/index">Home</a>
-<a href="/pugs/upload">Upload</a>
-<a href="/pugs/search">Search</a>
-</nav>
-<p>Song</p>
-<audio  src="<%=request.getContextPath()%>/image/1" type="audio/wav" controls preload="auto">		
+<div id="header">
+<h1>${name}</h1>
+</div>
+<div id="navBar">
+<a href="/pugs/index" id="navLink">Home</a>
+<a href="/pugs/upload"id="navLink">Upload</a>
+<a href="/pugs/search"id="navLink">Search</a>
+</div>
+<div id="content">
+<audio  src="<%=request.getContextPath()%>/song/play${songPath}/${name}" type="audio/wav" controls preload="auto">		
 </audio>
 
-<div id="songPlayer"><p>Song player here</p></div>
-<div id="playerButtonBar">
-<p>Play/Pause Button</p>
-<form action='/pugs/song/nextSong/${sid}' method='post'>
+<form action='/pugs/nextSong/${sid}' method='post' id="nextSong">
 <input type="submit" value="Next Song"/>
 </form>
 </div>

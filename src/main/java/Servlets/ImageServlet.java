@@ -1,4 +1,4 @@
-package Servlets;
+package edu.neumont.java.playlistpug;
 
 import java.io.IOException;
 
