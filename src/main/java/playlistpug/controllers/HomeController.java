@@ -34,6 +34,7 @@ public class HomeController {
     @RequestMapping("/playlist")
     public ModelAndView getPlaylist(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	long songid = Long.parseLong(request.getParameter(""));
         return new ModelAndView("playlist");
     }
 }

@@ -7,7 +7,9 @@ import playlistpug.models.Song;
 
 public interface IDALpug
 {
-	void add(Song song);
+	Long add(Song song);
+	
+	Song getById(Long id);
 
 	Song getByTitle(String title);
 	
@@ -16,7 +18,5 @@ public interface IDALpug
 	List<Song> getByTags(List<GenreTag> tag);
 	
 	List<Song> getByLyrics(String Lyrics);
-
-	void remove(Song song);
 
 }
