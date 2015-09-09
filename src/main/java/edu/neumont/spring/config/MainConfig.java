@@ -16,18 +16,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MainConfig 
 {
+	/**
 	private static final Logger logger = 
 		    LoggerFactory.getLogger(MainConfig.class);
 	
 	private static final String DATABASE_URL = "postgres://maphiawdhrurgw:PL4ApC1CK2qpN0XxBCfNJwehBU@ec2-54-163-228-0.compute-1.amazonaws.com:5432/d9tiku6olid4s7";
 	
-	private static DBConnectionProperties ConnectionInfoProperties;
+	private static ConnectionData connectionData;
 	
     @Bean(name="dataSource")
     public BasicDataSource dataSource() throws URISyntaxException 
     {
     	Setup();
-        return ConnectionInfoProperties.basicDataSource;
+        return connectionData.basicDataSource;
     }
     
     @Bean(name="ConnectionToDataBase")
@@ -36,15 +37,24 @@ public class MainConfig
     	Setup();
     	
  		Connection connection = DriverManager.getConnection(
- 				ConnectionInfoProperties.dbUrl,
- 				ConnectionInfoProperties.config
+ 				connectionData.dbUrl,
+ 				connectionData.config
  				);
          
          return connection; 
     }
 
 	//Helpers
-	private void driverSetup()
+    private void Setup() throws URISyntaxException
+	{   
+        if(connectionData == null)
+        {
+    		driverSetup();
+        	setDBConnectionProperties();
+        }
+	}
+    
+    private void driverSetup()
 	{
 		try 
     	{
@@ -57,7 +67,7 @@ public class MainConfig
 		}
 	}
 
-	private class DBConnectionProperties
+	private class ConnectionData
 	{
 		String username;
         String password;
@@ -65,58 +75,35 @@ public class MainConfig
         Properties config;
         BasicDataSource basicDataSource;
         
-        DBConnectionProperties()
-        {
-        	
-        }
-        
-        DBConnectionProperties(
-        		String username,
-        		String password,
-        		String dbUrl,
-        		Properties config, 
-        		BasicDataSource basicDataSource)
-        {
-        	this.username = username;
-        	this.password = password;
-        	this.dbUrl = dbUrl;
-        	this.basicDataSource = basicDataSource;
-        }
-	}
-	
-	private void Setup() throws URISyntaxException
-	{
-		driverSetup();
-        
-        if(ConnectionInfoProperties == null)
-        {
-        	setDBConnectionProperties();
-        }
+        ConnectionData(){}
 	}
 	
 	private void setDBConnectionProperties() throws URISyntaxException
 	{
 		URI dbUri = new URI(DATABASE_URL);
+		
+		connectionData = new ConnectionData();
         
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://"   +
+		connectionData.username = dbUri.getUserInfo().split(":")[0];
+		connectionData.password = dbUri.getUserInfo().split(":")[1];
+		connectionData.dbUrl = "jdbc:postgresql://"   +
 				        dbUri.getHost() + ':' +
 				        dbUri.getPort() +
 				        dbUri.getPath() +
 				        "?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
         
-        Properties config = new Properties();
-        config.setProperty("user", username);
-        config.setProperty("password", password);
-        config.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+		connectionData.basicDataSource = new BasicDataSource();
+		connectionData.basicDataSource.setUrl(connectionData.dbUrl);
+		connectionData.basicDataSource.setUsername(connectionData.username);
+		connectionData.basicDataSource.setPassword(connectionData.password);
         
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl(dbUrl);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
+		connectionData.config = new Properties();
+		connectionData.config.setProperty("user", connectionData.username);
+		connectionData.config.setProperty("password", connectionData.password);
+		connectionData.config.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         
-        ConnectionInfoProperties = new DBConnectionProperties(username, password, dbUrl, config, basicDataSource);
 	}
+	
+	/**/
     
 }

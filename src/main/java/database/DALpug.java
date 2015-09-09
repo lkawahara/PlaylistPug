@@ -35,7 +35,7 @@ public class DALpug implements IDALpug
 	}
 	
 	@Override
-	public Long add(Song song)
+	public void add(Song song)
 	{
 		ArrayList<String> values = serializeSong(song);
 		
@@ -46,9 +46,10 @@ public class DALpug implements IDALpug
 			logger.error("Failed to add Song");
 		}
 		
-		return new Long(result);
+		//return new Long(result);
 	}
 
+	/**
 	@Override
 	public Song getById(Long id)
 	{
@@ -65,6 +66,7 @@ public class DALpug implements IDALpug
 		
 		return song;
 	}
+	/**/
 
 	@Override
 	public Song getByTitle(String title)
@@ -235,6 +237,12 @@ public class DALpug implements IDALpug
 		{
 			logger.error("closeResults: " + e.getMessage());
 		}
+	}
+
+	@Override
+	public void remove(Song song) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/*

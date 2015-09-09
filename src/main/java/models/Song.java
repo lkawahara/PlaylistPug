@@ -3,18 +3,58 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "SongList")
 public class Song
 {
-	private final String songPath;
+	@Id
+	private String songName;
 	
-	private final AudioData data;
+	@Column(name="SONG_PATH")
+	private String songPath;
 	
-	private final String songName;
+	@OneToOne
+	@JoinColumn(name="AUDIO_DATA_ID")
+	private AudioData data;
 	
+	@Column(name="TAGS")
+	@ElementCollection(targetClass = GenreTag.class)
+	@Enumerated(EnumType.STRING)
 	private List<GenreTag> tags;
 	
+	@Column(name="LYRICS")
 	private String lyrics;
 	
+	public Song(){}
+	
+	public Song(AudioData data)
+	{
+		this.data = data;
+		this.songName = String.valueOf(data.getBPM());
+		this.songPath = null;
+		this.tags = new ArrayList<GenreTag>();
+		this.lyrics = "not entered";
+	}
+	
+	public Song(String songName, AudioData data)
+	{
+		this.data = data;
+		this.songName = songName;//String.valueOf(data.getBPM());
+		this.songPath = null;
+		this.tags = new ArrayList<GenreTag>();
+		this.lyrics = "not entered";
+	}
+
 	public Song(String songName, AudioData data, String songPath)
 	{
 		this.data = data;
@@ -47,22 +87,6 @@ public class Song
 		this.tags = tags;
 		this.lyrics = lyrics;
 		this.songName = songName;
-	}
-	
-	public Song(String songName, AudioData data){
-		this.data = data;
-		this.songName = songName;//String.valueOf(data.getBPM());
-		this.songPath = null;
-		this.tags = new ArrayList<GenreTag>();
-		this.lyrics = "not entered";
-	}
-
-	public Song(AudioData data){
-		this.data = data;
-		this.songName = String.valueOf(data.getBPM());
-		this.songPath = null;
-		this.tags = new ArrayList<GenreTag>();
-		this.lyrics = "not entered";
 	}
 	
 	public List<GenreTag> getTags() 

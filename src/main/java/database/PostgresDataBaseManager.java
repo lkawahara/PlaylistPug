@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-//import edu.neumont.spring.config.MainConfig;
+import edu.neumont.spring.config.MainConfig;
 import interfaces.IDataBaseManager;
 
 public class PostgresDataBaseManager 
@@ -21,7 +21,7 @@ public class PostgresDataBaseManager
 	
 	BasicDataSource basicDataSource;
 	
-	static PostgresDataBaseManager instance = new PostgresDataBaseManager();
+	private static PostgresDataBaseManager instance = new PostgresDataBaseManager();
 
 	public static PostgresDataBaseManager getInstance()
 	{
@@ -98,9 +98,9 @@ public class PostgresDataBaseManager
 	
 	private PostgresDataBaseManager()
 	{
-		//ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
-		//this.basicDataSource = (BasicDataSource) context.getBean("dataSource");
-		//context.close();
+		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+		this.basicDataSource = (BasicDataSource) context.getBean("dataSource");
+		context.close();
 	}
 	
 	/**

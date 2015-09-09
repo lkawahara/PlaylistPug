@@ -1,8 +1,9 @@
 package setup;
 
-import database.DummyDALpug;
-import dependencyInjector.DependencyInjector;
 import interfaces.ISetup;
+
+import database.DALpugJPA;
+import dependencyInjector.DependencyInjector;
 
 public class DependencyInjectorSetup implements ISetup 
 {
@@ -45,7 +46,7 @@ public class DependencyInjectorSetup implements ISetup
 	{
 		DependencyInjector dependencyInjector = DependencyInjector.getInstance();
 		
-		dependencyInjector.add("IDALpug", new DummyDALpug());
+		dependencyInjector.add("IDALpug", new DALpugJPA());
 	}
 
 }

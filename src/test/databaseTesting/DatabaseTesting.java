@@ -6,150 +6,84 @@ import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import database.DALpug;
-import edu.neumont.spring.config.MainConfig;
-import models.GenreTag;
 import models.Song;
+import models.AudioData;
+import models.GenreTag;
 import setup.MasterSetup;
+import interfaces.IDALpug;
+import edu.neumont.spring.config.MainConfig;
+import dependencyInjector.DependencyInjector;
 
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class DatabaseTesting 
 {
-
-	static BasicDataSource basicDataSource;
-	static DALpug dalpug;
+	static IDALpug dalpug;
 	static Song testSong;
 	
 	static boolean setupCalled = false;
 	static Long   id;
 	
+	static EntityManager entityManager;
+	
 	@BeforeClass
 	public static void setup()
 	{
-		if(!setupCalled)
-		{
-			setupCalled = true;
-			MasterSetup.getInstance().run();
-			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
-			basicDataSource = (BasicDataSource) context.getBean("dataSource");
-			dalpug = new DALpug();
-			testSong = getTestSong();
-			context.close();
-			id = dalpug.add(testSong);
-		}
+		//System.out.println("@BeforeClass");
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("playlistpug");
+		entityManager = emf.createEntityManager();
+		
+		MasterSetup.getInstance().run();
+		
+		dalpug = (IDALpug) DependencyInjector.getInstance().get("IDALpug");
+		
+		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+		testSong = getTestSong();
+		context.close();
+		dalpug.add(testSong);
+		
+		System.out.println("DALpug is: " + dalpug);
 	}
 	
 	@AfterClass
-	public static void takeDown()
+	public static  void tearDown()
 	{
-		dalpug.dropTable();
-	}
-	
-	@Test
-	public void connectToDatabase() 
-	{
-		try 
-		{
-			Connection connection = basicDataSource.getConnection();
-			if(connection == null)
-			{
-				fail("No connection was established");
-			}
-		}
-		catch (SQLException e) 
-		{
-			fail("Error creating connection: " + e.getMessage());
-			//e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void CreateATable() 
-	{
-		try 
-		{
-			Connection connection = basicDataSource.getConnection();
-			if(connection == null)
-			{
-				fail("No connection was established");
-			}
-			else
-			{
-				StringBuilder command = new StringBuilder();		
-				command.append("CREATE TABLE IF NOT EXISTS test(id INT PRIMARY KEY, name VARCHAR(255))");
-				connection.prepareStatement(command.toString()).execute();
-				connection.close();
-			}
-		}
-		catch (SQLException e) 
-		{
-			fail(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void CreateandDeleteATable() 
-	{
-		try 
-		{
-			Connection connection = basicDataSource.getConnection();
-			if(connection == null)
-			{
-				fail("No connection was established");
-			}
-			else
-			{
-				StringBuilder command = new StringBuilder();
-				command.append("DROP TABLE IF EXISTS test");
-				connection.prepareStatement(command.toString()).execute();
-				connection.close();
-			}
-		}
-		catch (SQLException e) 
-		{
-			fail(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void AddingSongToDatabase()
-	{
-		Long id = dalpug.add(testSong);
 		
-		/**/
-		if(id == 0l)
-		{
-			fail("Song was not added");
-		}
-		/**/
-	}
+    }
 	
 	@Test
-	public void GetSongByID()
+	public void GetByTitle()
 	{
-		testSongMatch(dalpug.getById(id), testSong, "The correct song was not returned: GetSongByID");
+		testSongMatch(dalpug.getByTitle(testSong.getTitle()), testSong, "The incorrect song was returned: GetByTitle");
 	}
-	
+
 	@Test
-	public void GetSongByLyrics()
+	public void GetByLyrics()
 	{	
-		testSongMatchList(dalpug.getByLyrics("NA"), testSong, "The correct song was not returned: GetSongByLyrics");
+		testSongMatchList(dalpug.getByLyrics(testSong.getLyrics()), testSong, "The incorrect song was returned: GetByLyrics");
 	}
 	
 	@Test
-	public void GetSongByTag()
+	public void GetByTag()
 	{
-		testSongMatchList(dalpug.getByTag(GenreTag.Classical), testSong, "The correct song was not returned: GetSongByTag");
+		testSongMatchList(dalpug.getByTag(testSong.getTags().get(0)), testSong, "The correct song was not returned: GetByTag");
 	}
 	
+	@Test
+	public void GetByTags()
+	{
+		testSongMatchList(dalpug.getByTags(testSong.getTags()), testSong, "The correct song was not returned: GetByTags");
+	}
+	
+	//Helpers
 	private static void testSongMatch(Song songReturned, Song testSong, String msg)
 	{
 		if(!testSong(songReturned, testSong))
@@ -184,12 +118,13 @@ public class DatabaseTesting
 	//Helpers
 	static Song getTestSong()
 	{
+		String title = "LooneyToonsEnd";
 		String fileName = "LooneyToonsEnd.wav";
 		String path = System.getProperty("user.dir") + "\\src\\main\\java\\tempFiles\\" + fileName;
 		String Lyrics = "NA";
 		List<GenreTag> tags = new ArrayList<>();
 		tags.add(GenreTag.Classical);
-		return new Song("LooneyToons", null, path, tags, Lyrics);
+		return new Song(title, new AudioData(), path, tags, Lyrics);
 	}
 
 }

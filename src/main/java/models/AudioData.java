@@ -4,14 +4,42 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
 import com.badlogic.audio.io.MP3Decoder;
 
-public class AudioData {
-
+@Entity
+public class AudioData
+{
+	
+	@Id
+	@GeneratedValue(generator="seq", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="seq", sequenceName="seq")
+	private Long id;
+	
+	@Column(name="BPM")
 	private int bpm;
+	
+	@Column(name="STARTVOLUME")
 	private float startVolume;
+	
+	@Column(name="ENDVOLUME")
 	private float endVolume;
+	
+	@Column(name="TAGS")
+	@ElementCollection(targetClass = GenreTag.class)
+	@Enumerated(EnumType.STRING)
 	private Collection<GenreTag> tags;
+	
+	public AudioData(){}
 	
 	public AudioData(FileInputStream fileInputStream)
 	{

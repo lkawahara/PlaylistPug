@@ -26,16 +26,15 @@ public class DummyDALpug implements IDALpug
 
 	
 	@Override
-	public Long add(Song song) 
-	{
-		return 1l;
-	}
+	public void add(Song song) {}
 
+	/**
 	@Override
 	public Song getById(Long id) 
 	{
 		return dummySong;
 	}
+	/**/
 
 	@Override
 	public Song getByTitle(String title)
@@ -59,6 +58,13 @@ public class DummyDALpug implements IDALpug
 	public List<Song> getByLyrics(String Lyrics) 
 	{
 		return dummySongCollection;
+	}
+
+
+	@Override
+	public void remove(Song song) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
